@@ -106,6 +106,9 @@ class www::ide ( $git_root, $root_dir, $team_status_imgs_live_dir ) {
   class { 'python':
     virtualenv  => present,
   }
+  package { ['freetype-devel', 'parted-devel', 'nss-devel']:
+    ensure => present,
+  }
   file { $venv_dir:
     ensure  => directory,
     owner   => 'wwwcontent',
@@ -115,6 +118,7 @@ class www::ide ( $git_root, $root_dir, $team_status_imgs_live_dir ) {
   file { "${venv_dir}/lint-requirements.txt":
     ensure  => file,
     source  => 'puppet:///modules/www/ide-lint-requirements.txt',
+    require => Package['freetype-devel', 'parted-devel', 'nss-devel'],
   } ~>
   python::virtualenv { $venv_dir:
     ensure          => present,
