@@ -108,10 +108,24 @@ class www::phpbb ( $git_root, $root_dir ) {
     mode => '2770',
     require => File[$root_dir],
   }
+
+  yumrepo { 'docker':
+    descr     => 'Docker CE Stable - $basearch',
+    ensure    => present,
+    baseurl   => 'https://download.docker.com/linux/fedora/$releasever/$basearch/stable',
+    gpgcheck  => true,
+    gpgkey    => 'https://download.docker.com/linux/fedora/gpg',
+  } ->
+
+  # exec { 'add docker repo':
+  #   command => 'dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo',
+  #   creates => '/etc/yum.repos.d/docker-ce.repo',
+  # }
+
   class { 'docker':
     use_upstream_package_source => false,
-    service_overrides_template  => false,
-    docker_ce_package_name      => 'docker',
+    # service_overrides_template  => false,
+    # docker_ce_package_name      => 'docker',
   }
 
   docker::image { 'bitnami/phpbb':
