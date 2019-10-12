@@ -28,9 +28,6 @@
 [submodule "modules/puppetlabs-translate"]
 	path = modules/puppetlabs-translate
 	url = https://github.com/puppetlabs/puppetlabs-translate
-[submodule "modules/monitoring/staging"]
-	path = modules/monitoring/staging
-	url = https://github.com/voxpupuli/puppet-staging
 [submodule "modules/translate"]
 	path = modules/translate
 	url = https://github.com/puppetlabs/puppetlabs-translate
