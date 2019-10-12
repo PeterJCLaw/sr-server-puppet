@@ -75,4 +75,3 @@ class monitoring ( $git_root ) {
   }
 
 }
-
