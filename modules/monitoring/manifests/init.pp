@@ -68,7 +68,7 @@ class monitoring ( $git_root ) {
     owner => 'root',
     group => 'root',
     provider => 'git',
-    source => "${git_root}/server/monitoring.git",
+    source => "${git_root}/server-monitoring.git",
     # TODO: why is this not 'origin/master'?
     revision => 'master',
     require => User['monitoring']

@@ -14,25 +14,12 @@ class sr_site::git($git_root) {
     home => '/'
   }
 
-  if !$devmode {
-    # On a production machine, the dir /srv/git/scripts will already exist
-    # as a matter of course (because git is stored on said production machine)
-    cron { 'cgit-reconf':
-      command => '/srv/git/scripts/cgit-reconf',
-      hour => '*/4',
-      minute => '13',
-      user => 'git',
-      require => Package['GitPython'],
-    }
-  } else {
-    # On a dev machine, the scripts repo needs to be checked out manually.
-    cron { 'cgit-reconf':
-      command => '/srv/git/scripts/cgit-reconf',
-      hour => '*/4',
-      minute => '13',
-      user => 'git',
-      require => [Vcsrepo['/srv/git/scripts'], Package['GitPython']],
-    }
+  cron { 'cgit-reconf':
+    command => '/srv/git/scripts/cgit-reconf',
+    hour => '*/4',
+    minute => '13',
+    user => 'git',
+    require => [Vcsrepo['/srv/git/scripts'], Package['GitPython']],
   }
 
   # Ensure the git serving dir exists
@@ -57,16 +44,14 @@ class sr_site::git($git_root) {
 
 
   # Maintain a clone of the git admin scripts.
-  if $devmode {
-    vcsrepo { '/srv/git/scripts':
-      ensure => present,
-      provider => git,
-      source => "${git_root}/scripts",
-      revision => 'origin/master',
-      owner => 'git',
-      group => 'users',
-      require => File['/srv/git'],
-    }
+  vcsrepo { '/srv/git/scripts':
+    ensure => present,
+    provider => git,
+    source => "${git_root}/server-git-maintenance-scripts",
+    revision => 'origin/master',
+    owner => 'git',
+    group => 'users',
+    require => File['/srv/git'],
   }
 
   package { 'GitPython':

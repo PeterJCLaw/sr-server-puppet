@@ -6,7 +6,7 @@ class www::tickets( $git_root, $web_root_dir ) {
     provider  => git,
     source    => "${git_root}/ticket-access.git",
     # TODO: change to origin/master once a maintainer situation is in place
-    revision  => '5b0073736b0af23f7738639767ef16a6ba5d3a09',
+    revision  => '825c2e9f9ebf6a767307c50892bfe03153147470',
     owner     => 'wwwcontent',
     group     => 'apache',
     require   => File[$web_root_dir],

@@ -8,7 +8,7 @@ class www::ide ( $git_root, $root_dir, $team_status_imgs_live_dir ) {
   vcsrepo { $root_dir:
     ensure => present,
     provider => git,
-    source => "${git_root}/cyanide.git",
+    source => "${git_root}/srobo-ide.git",
     revision => 'origin/master',
     user =>'wwwcontent',
     # Depend explicitly on PHP here since it's declared at the level above

@@ -14,7 +14,7 @@ class sr_site::backup ( $git_root ) {
     owner => 'root',
     group => 'root',
     provider => 'git',
-    source => "${git_root}/server/backup.git",
+    source => "${git_root}/server-backup.git",
     # Deliberately no auto update, the scripts here will end up being run as root
     revision => 'patience',
     require => Package['python3-ldap'],

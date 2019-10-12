@@ -1,6 +1,6 @@
 ---
 devmode: true
-git_root: https://studentrobotics.org/gerrit/p
+git_root: https://github.com/srobo
 
 competitor_services: true
 volunteer_services: true
