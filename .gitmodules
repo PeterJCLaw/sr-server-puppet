@@ -1,27 +1,27 @@
 [submodule "modules/firewall"]
 	path = modules/firewall
-	url = git://github.com/puppetlabs/puppetlabs-firewall.git
+	url = https://github.com/puppetlabs/puppetlabs-firewall.git
 [submodule "modules/vcsrepo"]
 	path = modules/vcsrepo
-	url = git://github.com/puppetlabs/puppetlabs-vcsrepo.git
+	url = https://github.com/puppetlabs/puppetlabs-vcsrepo.git
 [submodule "modules/mysql"]
 	path = modules/mysql
-	url = git://github.com/puppetlabs/puppetlabs-mysql.git
+	url = https://github.com/puppetlabs/puppetlabs-mysql.git
 [submodule "modules/ldap"]
 	path = modules/ldap
 	url = git://git.srobo.org/server/ldap.git
 [submodule "modules/stdlib"]
 	path = modules/stdlib
-	url = git://github.com/puppetlabs/puppetlabs-stdlib.git
+	url = https://github.com/puppetlabs/puppetlabs-stdlib.git
 [submodule "modules/ldapres"]
 	path = modules/ldapres
 	url = git://git.srobo.org/server/ldapres.git
 [submodule "modules/subversion"]
 	path = modules/subversion
-	url = git://github.com/jmorse/puppet-subversion.git
+	url = https://github.com/jmorse/puppet-subversion.git
 [submodule "modules/archive"]
 	path = modules/archive
-	url = git://github.com/camptocamp/puppet-archive.git
+	url = https://github.com/camptocamp/puppet-archive.git
 [submodule "modules/staging"]
 	path = modules/staging
 	url = https://github.com/voxpupuli/puppet-staging
