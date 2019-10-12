@@ -99,15 +99,6 @@ class www::phpbb ( $git_root, $root_dir ) {
     require => Vcsrepo[$root_dir],
   }
 
-  vcsrepo { "${extensions_dir}/pipebot":
-    ensure    => present,
-    user      => 'wwwcontent',
-    provider  => git,
-    source    => "${git_root}/phpbb-ext-sr-pipebot.git",
-    revision  => 'origin/master',
-    require   => File[$extensions_dir],
-  }
-
   vcsrepo { "${extensions_dir}/etc":
     ensure    => present,
     user      => 'wwwcontent',
