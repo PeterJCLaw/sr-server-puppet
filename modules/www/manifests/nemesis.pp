@@ -13,8 +13,7 @@ class www::nemesis ( $git_root, $root_dir ) {
     ensure  => present,
   }
 
-  package { ['python-sqlite3dbm',
-             'python-flask']:
+  package { ['python-flask']:
     ensure  => present,
     notify  => Service['httpd'],
   }
@@ -29,7 +28,6 @@ class www::nemesis ( $git_root, $root_dir ) {
     group => 'apache',
     require => Package['python-flask',
                        'python-ldap',
-                       'python-sqlite3dbm',
                        'python-unidecode'],
     notify => Service['httpd'],
   }
