@@ -13,7 +13,7 @@ class www::piwik ( $git_root, $root_dir ) {
     ensure => present,
     user => 'wwwcontent',
     provider => git,
-    source => 'git://github.com/piwik/piwik.git',
+    source => 'https://github.com/piwik/piwik.git',
     revision => '1.12',
     require => Package['php-gd', 'php-mysqlnd'],
   }
