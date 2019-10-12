@@ -77,8 +77,13 @@ class sr_site( $git_root ) {
   }
 
   if $competitor_services {
-    package { ['python-ldap', 'python-unidecode']:
+    package { 'python-ldap':
       ensure => present,
+    }
+    package { 'unidecode':
+      ensure    => present,
+      provider  => 'pip',
+      alias     => 'python-unidecode',
     }
 
     class { 'sr_site::openldap':
