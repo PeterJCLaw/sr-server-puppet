@@ -7,7 +7,7 @@ import sys
 LENGTH = 10
 CHARACTERS = (string.ascii_letters + string.digits) * 5 + string.punctuation.replace('"', '')
 
-print("Input TLAs", file=sys.stderr)
+print("Input TLAs (then press Ctrl+D for end)", file=sys.stderr)
 
 for line in sys.stdin.readlines():
     tla = line.strip().upper()
