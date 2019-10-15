@@ -6,6 +6,9 @@ High level documentation and how to get started with this all lies at:
 
 https://www.studentrobotics.org/trac/wiki/ServerConfig
 
+We also have separate instructions for how to commission a
+[new production machine](./new-machine.md).
+
 ## Linting
 
 `puppet-lint` can be used to lint the puppet. To use it do these things:
