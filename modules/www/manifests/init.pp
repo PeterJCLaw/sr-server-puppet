@@ -64,11 +64,13 @@ class www( $git_root ) {
       require => [User['wwwcontent'], File[$web_root_dir]],
     }
 
-    # phpBB forum, at srobo.org/forum
-    class { 'www::phpbb':
-      git_root => $git_root,
-      root_dir => '/var/www/phpbb',
-      require => User['wwwcontent'],
+    if hiera('configure_phpbb') {
+      # phpBB forum, at srobo.org/forum
+      class { 'www::phpbb':
+        git_root => $git_root,
+        root_dir => '/var/www/phpbb',
+        require => User['wwwcontent'],
+      }
     }
 
     # The IDE, srobo.org/ide

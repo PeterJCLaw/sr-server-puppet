@@ -59,6 +59,9 @@ ldap_mediaconsent_user_ssha_pw: '{SSHA}1NJFqzohn1w4jH1sb+B2CWbgqirrleQ3'
 
 # PhpBB
 
+# Whether to configure a PHPBB instance
+configure_phpbb: true
+
 # Name for phpBB's MySQL account
 phpbb_sql_user: phpbb_user
 
