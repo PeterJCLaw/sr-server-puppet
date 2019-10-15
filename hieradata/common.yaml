@@ -11,17 +11,24 @@ subversion_enabled: false
 # Defaults to true in development as we assume development instances don't have real DNS enties.
 static_tls_certificate: "%{devmode}"
 
-# Base DNS name for the site being hosted, for example 'studentrobotics.org' or 'cringe.jmorse.net'. Services and things lower in DNS than this (like ide. or git.) are based on this name.
+# Base DNS name for the site being hosted, for example 'studentrobotics.org' or
+# 'cringe.jmorse.net'. Services and things lower in DNS than this (like ide. or
+# git.) are based on this name.
 www_base_hostname: "%{::fqdn}"
 
-# 'Canonical' website address, which all website URLs should be based upon, i.e.  'www.studentrobotics.org'. Consider this the 'proper' name of the website, as opposed to the base DNS name.
+# 'Canonical' website address, which all website URLs should be based upon, i.e.
+# 'www.studentrobotics.org'. Consider this the 'proper' name of the website, as
+# opposed to the base DNS name.
 www_canonical_hostname: "%{::fqdn}"
 
 # Imported from common.csv, and recategorised:
 
 # Misc auth
 
-# List of OpenPGP user ID's to encrypt backups with. Takes the form of a list of email addresses, comma seperated, all inside a "" quote, i.e. "a@b,c@d,e@f". Better configuration approach would be welcome.  CAUTION: backups will fail if a user is listed here without additional signing, see puppet's backup.pp
+# List of OpenPGP user ID's to encrypt backups with. Takes the form of a list of
+# email addresses, comma seperated, all inside a "" quote, i.e. "a@b,c@d,e@f".
+# Better configuration approach would be welcome.  CAUTION: backups will fail if
+# a user is listed here without additional signing, see puppet's backup.pp
 backup_keys: 'jmorse@studentrobotics.org'
 
 
@@ -35,25 +42,30 @@ mysql_trac_pw: '123456'
 
 # LDAP
 
-# Password for the cn=Manager,o=sr account in LDAP, equivalent to the root LDAP account.  Plaintext.
+# Password for the cn=Manager,o=sr account in LDAP,
+# equivalent to the root LDAP account.  Plaintext.
 ldap_manager_pw: '123456'
 
 # Password for the 'anon LDAP' account. Plaintext.
 ldap_anon_user_pw: '123456'
 
-# Password for anon account, but in LDAP's internal format for the userPassword attribute.  Use 'slappasswd' to generate this value, and ensure it's always sync'd with ldap_anon_user_pw
+# Password for anon account, but in LDAP's internal format for the userPassword
+# attribute.  Use 'slappasswd' to generate this value, and ensure it's always
+# sync'd with ldap_anon_user_pw
 ldap_anon_user_ssha_pw: '{SSHA}1NJFqzohn1w4jH1sb+B2CWbgqirrleQ3'
 
 # Password for the 'ticket LDAP' account. Plaintext.
 ldap_ticket_user_pw: '123456'
 
-# Password for ticket account, but in LDAP's internal format for the userPassword attribute.  See ldap_anon_user_ssha_pw.
+# Password for ticket account, but in LDAP's internal format for the
+# userPassword attribute.  See ldap_anon_user_ssha_pw.
 ldap_ticket_user_ssha_pw: '{SSHA}1NJFqzohn1w4jH1sb+B2CWbgqirrleQ3'
 
 # Password for the MCF LDAP account. Plaintext.
 ldap_mediaconsent_user_pw: '123456'
 
-# Password for ticket account, but in LDAP's internal format for the userPassword attribute.  See ldap_anon_user_ssha_pw.
+# Password for ticket account, but in LDAP's internal format for the
+# userPassword attribute.  See ldap_anon_user_ssha_pw.
 ldap_mediaconsent_user_ssha_pw: '{SSHA}1NJFqzohn1w4jH1sb+B2CWbgqirrleQ3'
 
 
