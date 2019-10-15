@@ -69,6 +69,7 @@ phpbb_sql_pw: '123456'
 # IDE
 
 # Secret key for the IDE to encrypt its cookies with. Takes 256 bits of entropy, encoded in Base64.
+# `openssl rand -out ide.key 32` can be useful here (32 bytes == 256 bits)
 ide_cookie_key: ptDx0VR4dN0ZDKZdqF4zzlF7DI6XWDZRDP0mXLsPdVw=
 
 # UID attribute for the IDE's LDAP account.
