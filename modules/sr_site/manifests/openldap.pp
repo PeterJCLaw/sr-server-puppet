@@ -29,7 +29,7 @@ class sr_site::openldap {
     ensure => 'present',
     basedn => 'o=sr',
     rootdn => 'cn=Manager', # basedn is jammed on the front of this.
-    rootpw => $ldap_manager_pw, # Manager password is in common.csv
+    rootpw => $ldap_manager_pw,
   }
 
   # Give some config options to the client configuration. I think some of these
