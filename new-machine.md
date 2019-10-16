@@ -14,7 +14,7 @@
 4. Set the password for that account (so it can `sudo`):
 
     ```bash
-    password $USERNAME  # and then follow the prompts
+    passwd $USERNAME  # and then follow the prompts
     ```
 
 5. Logout and log back in as that user. This is important because our puppet
