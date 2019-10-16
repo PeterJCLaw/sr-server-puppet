@@ -66,6 +66,13 @@
        touch ide/notifications/sr ide/repos/sr ide/settings/sr
        ```
 
+     - `ldap/ldap_backup`; this should be empty on a new machine.
+
+       ```bash
+       mkdir --mode=700 /srv/secrets/ldap
+       touch /srv/secrets/ldap/ldap_backup
+       ```
+
      - various `login/ssh_host*` files. Copy these from `/etc/ssh/ssh_host*`.
        Yes this shouldn't be needed; it's an artefact of this puppet config
        being more about to restoring from backup than new machine setup.
