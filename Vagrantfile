@@ -11,7 +11,7 @@ Vagrant.configure("2") do |config|
     #   vagrant plugin install vagrant-vbguest
     #
     # which will ensure that the versions match when you provision the VM.
-    config.vm.box = "fedora/29-cloud-base"
+    config.vm.box = "fedora/30-cloud-base"
 
     config.vm.provider "virtualbox" do |v|
         # The box defaults to 512, things are smoother if we have more
