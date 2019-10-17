@@ -37,6 +37,9 @@ class sr_site( $git_root ) {
   # Fedora no longer ships with a cron installed by default, I chose one at random
   package { 'cronie':
     ensure => latest,
+  } ->
+  service { 'crond':
+    ensure => running,
   }
 
   exec { 'setenforce 0':
