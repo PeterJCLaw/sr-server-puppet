@@ -25,4 +25,17 @@ class sr_site::userman ( $git_root ) {
     content => template('sr_site/userman_srusers.ini.erb'),
     require => Vcsrepo[$root_dir],
   }
+
+  # Configurate nemesis with the ability to send emails.
+  $nemesis_mail_smtp = hiera('nemesis_mail_smtp')
+  $nemesis_mail_user = hiera('nemesis_mail_user')
+  $nemesis_mail_pw   = hiera('nemesis_mail_pw')
+  $nemesis_mail_from = hiera('nemesis_mail_from')
+  file { "${root_dir}/local.ini":
+    owner   => 'root',
+    group   => 'root',
+    mode    => '0600',
+    content => template('sr_site/userman.ini.erb'),
+    require => Vcsrepo[$root_dir],
+  }
 }
