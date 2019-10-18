@@ -126,6 +126,9 @@ class www::phpbb ( $git_root, $root_dir ) {
     use_upstream_package_source => false,
     # service_overrides_template  => false,
     # docker_ce_package_name      => 'docker',
+    bip             => '192.168.58.0/24',
+    fixed_cidr      => '192.168.58.4/32',
+    # default_gateway => '192.168.58.1',
   }
 
   docker::image { 'bitnami/phpbb':
@@ -133,17 +136,20 @@ class www::phpbb ( $git_root, $root_dir ) {
     image_tag => '3.2.3',
   }
 
+  docker_network { 'phpbb-net':
+    ensure    => absent,
+  }
+
   docker::run { 'phpbb':
     image   => 'bitnami/phpbb',
-    # The port used matches `APACHE_HTTP_PORT_NUMBER` below and is bound to by
-    # our nginx config.
-    ports   => '8080',
+    # Connection port 8080 outside the container (i.e: from nginx) to port 80
+    # inside the container (i.e: the apache there running the forum)
+    ports   => '8080:80',
     env     => [
-      # TODO: do we need to also specify `MARIADB_HOST`?
+      "MARIADB_HOST=192.168.58.1",
       "PHPBB_DATABASE_NAME=${forum_db_name}",
       "PHPBB_DATABASE_USER=${forum_user}",
       "PHPBB_DATABASE_PASSWORD=${forum_pw}",
-      "APACHE_HTTP_PORT_NUMBER=8080",
     ],
   }
 }
