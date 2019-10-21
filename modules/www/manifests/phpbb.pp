@@ -149,18 +149,14 @@ class www::phpbb ( $git_root, $root_dir ) {
     use_upstream_package_source => false,
     # service_overrides_template  => false,
     # docker_ce_package_name      => 'docker',
-    bip             => '192.168.58.0/24',
-    fixed_cidr      => '192.168.58.4/32',
+    # bip             => '192.168.58.0/24',
+    # fixed_cidr      => '192.168.58.4/32',
     # default_gateway => '192.168.58.1',
   }
 
   docker::image { 'bitnami/phpbb':
     # TODO: use a more recent tag once all set up & working
     image_tag => '3.2.3',
-  }
-
-  docker_network { 'phpbb-net':
-    ensure    => absent,
   }
 
   docker::run { 'phpbb':
