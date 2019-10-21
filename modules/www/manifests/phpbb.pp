@@ -155,8 +155,7 @@ class www::phpbb ( $git_root, $root_dir ) {
   }
 
   docker::image { 'bitnami/phpbb':
-    # TODO: use a more recent tag once all set up & working
-    image_tag => '3.2.3',
+    image_tag => '3.2.8',
   }
 
   docker::run { 'phpbb':
