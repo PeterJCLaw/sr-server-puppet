@@ -6,6 +6,8 @@ class www::phpbb ( $git_root, $root_dir ) {
   $forum_user = hiera('phpbb_sql_user')
   $forum_pw = hiera('phpbb_sql_pw')
 
+  $host_ip_from_within_container = '172.17.0.1'
+
   file { $root_dir:
     ensure  => directory,
     mode    => '0755',
@@ -109,6 +111,27 @@ class www::phpbb ( $git_root, $root_dir ) {
     require => File[$root_dir],
   }
 
+  vcsrepo { "${root_dir}/python-port-forward":
+    ensure    => present,
+    provider  => git,
+    source    => 'https://github.com/cgx027/python-port-forward',
+    revision  => 'dc6657b28d52091d5b9909b32c243fdeb82a9059',
+  } ->
+  file { "${root_dir}/python-port-forward/port-forward.config":
+    content  => template('www/port-forward.config.erb'),
+  }
+
+  sr_site::systemd_service { 'phpbb-port-forward':
+    desc    => 'Forwards ports from the host for access from within the PHPBB Docker container.',
+    dir     => "${root_dir}/python-port-forward",
+    user    => 'root',
+    command => "/usr/bin/python port-forward.py",
+    subs    => [
+      File["${root_dir}/python-port-forward/port-forward.config"],
+      Vcsrepo["${root_dir}/python-port-forward"],
+    ]
+  }
+
   yumrepo { 'docker':
     descr     => 'Docker CE Stable - $basearch',
     ensure    => present,
@@ -146,10 +169,11 @@ class www::phpbb ( $git_root, $root_dir ) {
     # inside the container (i.e: the apache there running the forum)
     ports   => '8080:80',
     env     => [
-      "MARIADB_HOST=192.168.58.1",
+      "MARIADB_HOST=${host_ip_from_within_container}",
       "PHPBB_DATABASE_NAME=${forum_db_name}",
       "PHPBB_DATABASE_USER=${forum_user}",
       "PHPBB_DATABASE_PASSWORD=${forum_pw}",
     ],
+    require => Vcsrepo["${root_dir}/python-port-forward"],
   }
 }
