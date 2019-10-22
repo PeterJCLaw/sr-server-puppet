@@ -1,14 +1,14 @@
 
 class sr_site::fw_post {
 
-  firewall { '999 drop all (v4)':
+  firewall { '999 reject all (v4)':
     provider  => 'iptables',
-    action    => 'drop',
+    action    => 'reject',
   }
 
-  firewall { '999 drop all (v6)':
+  firewall { '999 reject all (v6)':
     provider  => 'ip6tables',
-    action    => 'drop',
+    action    => 'reject',
   }
 
 }
