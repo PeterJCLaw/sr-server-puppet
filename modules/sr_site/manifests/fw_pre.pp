@@ -29,8 +29,15 @@ class sr_site::fw_pre {
     }
   }
 
-  sr_site::fw_pre::common_rule { '000 accept all icmp':
+  firewall { '000 accept all icmp (v4)':
+    provider => 'iptables',
     proto  => 'icmp',
+    action => 'accept',
+  }
+
+  firewall { '000 accept all icmpv6 (v6)':
+    provider => 'ip6tables',
+    proto  => 'ipv6-icmp',
     action => 'accept',
   }
 
