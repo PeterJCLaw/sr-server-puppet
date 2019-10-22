@@ -16,8 +16,7 @@ class sr_site::firewall {
 
   class { 'sr_site::fw_pre':
     require => Service['iptables'],
-  }
-
+  } ->
   class { 'sr_site::fw_post':
     require => Service['iptables'],
   }
