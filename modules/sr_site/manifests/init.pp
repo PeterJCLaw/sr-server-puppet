@@ -139,7 +139,7 @@ class sr_site( $git_root ) {
     require => Package['rsyslog'],
   }
 
-  package { ['htop', 'nano']:
+  package { ['htop', 'lsof', 'nano', 'nmap-ncat']:
     ensure => latest,
   }
 
