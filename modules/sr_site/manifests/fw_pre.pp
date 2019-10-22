@@ -1,12 +1,40 @@
 
 class sr_site::fw_pre {
 
-  firewall { '000 accept all icmp':
+  define common_rule(
+    $action,
+    $chain = undef,
+    $dport = undef,
+    $iniface = undef,
+    $proto = undef,
+    $state = undef
+  ) {
+    firewall { "${title} (v4)":
+      provider  => 'iptables',
+      action    => $action,
+      chain     => $chain,
+      dport     => $dport,
+      iniface   => $iniface,
+      proto     => $proto,
+      state     => $state,
+    }
+    firewall { "${title} (v6)":
+      provider => 'ip6tables',
+      action    => $action,
+      chain     => $chain,
+      dport     => $dport,
+      iniface   => $iniface,
+      proto     => $proto,
+      state     => $state,
+    }
+  }
+
+  sr_site::fw_pre::common_rule { '000 accept all icmp':
     proto  => 'icmp',
     action => 'accept',
   }
 
-  firewall { '001 allow loopback':
+  sr_site::fw_pre::common_rule { '001 allow loopback':
     iniface => 'lo',
     chain => 'INPUT',
     action => 'accept',
@@ -14,35 +42,35 @@ class sr_site::fw_pre {
 
   # Allow all traffic attached to established connections. Important for
   # connections made by the server.
-  firewall { '000 INPUT allow related and established':
+  sr_site::fw_pre::common_rule { '000 INPUT allow related and established':
     state => ['RELATED', 'ESTABLISHED'],
     action => 'accept',
     proto => 'all',
   }
 
   # Allow everyone to connect to ssh.
-  firewall { '002 ssh':
+  sr_site::fw_pre::common_rule { '002 ssh':
     proto  => 'tcp',
     dport => 22,
     action => 'accept',
   }
 
   # Allow everyone to connect to the anonymous git service.
-  firewall { '003 git':
+  sr_site::fw_pre::common_rule { '003 git':
     proto => 'tcp',
     dport => 9418,
     action => 'accept',
   }
 
   # Allow everyone to connect to the HTTP website.
-  firewall { '004 http':
+  sr_site::fw_pre::common_rule { '004 http':
     proto => 'tcp',
     dport => 80,
     action => 'accept',
   }
 
   # Allow everyone to connect to the SSL website
-  firewall { '005 https':
+  sr_site::fw_pre::common_rule { '005 https':
     proto => 'tcp',
     dport => 443,
     action => 'accept',
