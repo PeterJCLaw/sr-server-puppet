@@ -11,6 +11,7 @@ class sr_site::firewall {
 
   class { 'firewall':
     ensure => running,
+    ensure_v6 => running,
   }
 
   class { 'sr_site::fw_pre':
