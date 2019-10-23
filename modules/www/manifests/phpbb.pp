@@ -96,13 +96,6 @@ class www::phpbb ( $git_root, $root_dir ) {
     require => File[$root_dir],
   }
 
-  # Some form of forum page cache
-  file { "${root_dir}/cache":
-    ensure => directory,
-    mode => '2770',
-    require => File[$root_dir],
-  }
-
   # Not the foggiest, but this is how it was on optimus, so this is configured
   # thus here too.
   file { "${root_dir}/store":
