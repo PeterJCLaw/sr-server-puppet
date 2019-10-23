@@ -162,6 +162,9 @@ class www::phpbb ( $git_root, $root_dir ) {
       "PHPBB_DATABASE_USER=${forum_user}",
       "PHPBB_DATABASE_PASSWORD=${forum_pw}",
     ],
+    volumes => [
+      "${root_dir}:/bitnami/phpbb",
+    ],
     require => Vcsrepo["${root_dir}/python-port-forward"],
   }
 }
