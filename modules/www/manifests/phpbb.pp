@@ -41,9 +41,9 @@ class www::phpbb ( $git_root, $root_dir ) {
   # The style we want
   archive { 'phpbb-prosilver_se-style':
     ensure        => present,
-    url           => 'https://www.phpbb.com/customise/db/download/160251',
+    url           => 'https://www.phpbb.com/customise/db/download/170156',
     extension     => 'zip',
-    digest_string => 'bd17b840431d12ef335d73755be787f0',
+    digest_string => 'b113e13d07cb0cb17742b49628d2184e',
     digest_type   => 'md5',
     target        => "${root_dir}/styles",
     # where it downloads the file to, also where it puts the .md5 file
