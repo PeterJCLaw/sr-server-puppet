@@ -47,4 +47,18 @@ class sr_site::fw_pre {
     dport => 443,
     action => 'accept',
   }
+
+  if hiera('competitor_services') {
+    # Allow docker (for the PHPBB forums) to connect to LDAP and MySQL
+    firewall { '100 docker -> MySQL':
+      source => '172.17.0.1/24',
+      dport => 3306,
+      action => 'accept',
+    }
+    firewall { '101 docker -> LDAP':
+      source => '172.17.0.1/24',
+      dport => 389,
+      action => 'accept',
+    }
+  }
 }
