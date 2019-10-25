@@ -149,18 +149,8 @@ class www::phpbb ( $git_root, $root_dir ) {
     gpgkey    => 'https://download.docker.com/linux/fedora/gpg',
   } ->
 
-  # exec { 'add docker repo':
-  #   command => 'dnf config-manager --add-repo https://download.docker.com/linux/fedora/docker-ce.repo',
-  #   creates => '/etc/yum.repos.d/docker-ce.repo',
-  # }
-
   class { 'docker':
     use_upstream_package_source => false,
-    # service_overrides_template  => false,
-    # docker_ce_package_name      => 'docker',
-    # bip             => '192.168.58.0/24',
-    # fixed_cidr      => '192.168.58.4/32',
-    # default_gateway => '192.168.58.1',
   }
 
   docker::image { 'bitnami/phpbb':
