@@ -95,6 +95,9 @@ http {
             proxy_set_header Host               $host;
         }
 
+        # Work around https://github.com/bitnami/bitnami-docker-phpbb/issues/54.
+        # Ideally we'd use a `sub_filter` in the above block, but I couldn't
+        # make that work, hence this hack.
         location /bitnami/phpbb/ {
             proxy_pass http://127.0.0.1:8080/;
             proxy_pass_request_headers on;
