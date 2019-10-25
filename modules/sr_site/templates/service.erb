@@ -1,0 +1,17 @@
+[Unit]
+Description=<%= @service_description %>
+After=<%= @depends_str %>
+
+[Service]
+User=<%= @user %>
+
+Type=simple
+
+<% if @start_dir %>
+WorkingDirectory=<%= @start_dir %>
+<% end %>
+
+ExecStart=<%= @start_command %>
+
+[Install]
+WantedBy=multi-user.target
