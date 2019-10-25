@@ -7,10 +7,14 @@ class www::phpbb ( $git_root, $root_dir ) {
   $forum_pw = hiera('phpbb_sql_pw')
 
   $host_ip_from_within_container = '172.17.0.1'
+  $phpbb_version = '3.2.8'
 
-  file { $root_dir:
-    ensure  => directory,
-    mode    => '0755',
+  # Checkout of the phpbb sources
+  vcsrepo { $root_dir:
+    ensure => present,
+    provider => git,
+    source => 'https://github.com/phpbb/phpbb.git',
+    revision => "release-${$phpbb_version}",
   }
 
   # Create the MySQL db for the forum
@@ -29,13 +33,25 @@ class www::phpbb ( $git_root, $root_dir ) {
     require => Mysql::Db[$forum_db_name],
   }
 
+  # Convince the Docker image that the database (etc.) is already configured
+  file { "${root_dir}/phpBB/.initialized":
+    ensure => present,
+    content => '',
+    require => Vcsrepo[$root_dir],
+  }
+  file { "${root_dir}/phpBB/.restored":
+    ensure => present,
+    content => '',
+    require => Vcsrepo[$root_dir],
+  }
+
   # Maintain permissions on the config file, and template it. Contains SQL
   # connection gunge.
-  $config_file = "${root_dir}/config.php"
+  $config_file = "${root_dir}/phpBB/config.php"
   file { $config_file:
     ensure => present,
     content => template('www/forum_config.php.erb'),
-    require => File[$root_dir],
+    require => Vcsrepo[$root_dir],
   }
 
   # The style we want
@@ -45,24 +61,24 @@ class www::phpbb ( $git_root, $root_dir ) {
     extension     => 'zip',
     digest_string => 'b113e13d07cb0cb17742b49628d2184e',
     digest_type   => 'md5',
-    target        => "${root_dir}/styles",
+    target        => "${root_dir}/phpBB/styles",
     # where it downloads the file to, also where it puts the .md5 file
     src_target    => $root_dir,
-    require       => File[$root_dir],
+    require       => Vcsrepo[$root_dir],
   }
 
-  file { "${root_dir}/ext":
+  file { "${root_dir}/phpBB/ext":
     ensure  => directory,
     mode    => '0755',
-    require => File[$root_dir],
+    require => Vcsrepo[$root_dir],
   }
 
   # Our custom extensions
-  $extensions_dir = "${root_dir}/ext/sr"
+  $extensions_dir = "${root_dir}/phpBB/ext/sr"
   file { $extensions_dir:
     ensure  => directory,
     mode    => '0755',
-    require => File["${root_dir}/ext"],
+    require => File["${root_dir}/phpBB/ext"],
   }
 
   vcsrepo { "${extensions_dir}/etc":
@@ -74,34 +90,34 @@ class www::phpbb ( $git_root, $root_dir ) {
   }
 
   # Extension for slack integration
-  file { "${root_dir}/ext/TheH":
+  file { "${root_dir}/phpBB/ext/TheH":
     ensure  => directory,
     mode    => '0755',
-    require => File["${root_dir}/ext"],
+    require => File["${root_dir}/phpBB/ext"],
   }
 
-  vcsrepo { "${root_dir}/ext/TheH/entropy":
+  vcsrepo { "${root_dir}/phpBB/ext/TheH/entropy":
     ensure    => present,
     provider  => git,
     source    => 'https://github.com/haivala/phpBB-Entropy-Extension',
     revision  => '61390529da8e49a7aa306dcf33046659e1bbc0f6', # pin so upgrades are explicit
-    require   => File["${root_dir}/ext/TheH"],
+    require   => File["${root_dir}/phpBB/ext/TheH"],
   }
 
   # Directory for storing forum attachments.
-  $attachments_dir = "${root_dir}/files"
+  $attachments_dir = "${root_dir}/phpBB/files"
   file { $attachments_dir:
     ensure => directory,
     mode => '2770',
-    require => File[$root_dir],
+    require => Vcsrepo[$root_dir],
   }
 
   # Not the foggiest, but this is how it was on optimus, so this is configured
   # thus here too.
-  file { "${root_dir}/store":
+  file { "${root_dir}/phpBB/store":
     ensure => directory,
     mode => '2770',
-    require => File[$root_dir],
+    require => Vcsrepo[$root_dir],
   }
 
   vcsrepo { "${root_dir}/python-port-forward":
@@ -148,7 +164,7 @@ class www::phpbb ( $git_root, $root_dir ) {
   }
 
   docker::image { 'bitnami/phpbb':
-    image_tag => '3.2.8',
+    image_tag => $phpbb_version,
   }
 
   docker::run { 'phpbb':
@@ -163,7 +179,7 @@ class www::phpbb ( $git_root, $root_dir ) {
       "PHPBB_DATABASE_PASSWORD=${forum_pw}",
     ],
     volumes => [
-      "${root_dir}:/bitnami/phpbb",
+      "${root_dir}/phpBB:/bitnami/phpbb",
     ],
     require => Vcsrepo["${root_dir}/python-port-forward"],
   }
