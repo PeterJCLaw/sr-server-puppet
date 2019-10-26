@@ -5,7 +5,7 @@ import string
 import sys
 
 # Characters which are easy to type and relatively safe within quoted YAML
-LIMITED_PUNCTUATION = "!£$%^&*-=_+@'~.,/<>[]{}()"
+LIMITED_PUNCTUATION = r"!£$%^&*-=_+@'~.,/<>[]{}()"
 
 LENGTH = 10
 CHARACTERS = (string.ascii_letters + string.digits) * 5 + LIMITED_PUNCTUATION
