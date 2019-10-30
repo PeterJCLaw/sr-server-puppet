@@ -116,3 +116,17 @@
     ```
     Error: /Stage[main]/Sr_site::Firewall/Resources[firewall]: Failed to generate additional resources using 'generate': Command iptables_save is missing
     ```
+
+11. Configure the forums' Slack integration. This is manual as it involves
+    getting a secret from Slack and inputting it into the forums configuration
+    pages.
+
+    1. Login to the forums' Admin Control Panel and go to the Customise tab.
+    2. Disable and then re-enable the "Entropy" extension (this forces it to
+       re-register with PHPBB and thus add itself to the Admin Control Panel UI)
+    3. Sign in to the SR slack and then visit https://api.slack.com/apps
+    4. Create an app to use (or click through to an existing one) and then to
+       "Add features and functionality" and then "Incoming Webhooks".
+    5. Copy the Webhook URL for the app.
+    7. Go to the Extension page in the Admin Control Panel of the forums
+    6. Paste the Webhook URL into the "Incoming webkook url" field & Submit
