@@ -153,6 +153,12 @@ class www::phpbb ( $git_root, $root_dir ) {
     use_upstream_package_source => false,
   }
 
+  # Restart docker whenever the firewall rules are updated. This is needed
+  # because puppet removes all firewall rules it doesn't know about, including
+  # those which docker puts in place (and needs). Restarting the docker service
+  # gets docker to put them back again. Yeah, it's ugly but it works.
+  Resources['firewall'] ~> Service['docker']
+
   docker::image { 'bitnami/phpbb':
     image_tag => $phpbb_version,
   }
