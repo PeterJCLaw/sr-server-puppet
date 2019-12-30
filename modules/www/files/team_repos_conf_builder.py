@@ -52,8 +52,8 @@ template_string = ''.join(template_lines)
 replaced_content = ''
 
 # Read manager password
-passwordf = open('/etc/ldap.secret')
-pw = passwordf.readlines()[0]
+with open('/etc/ldap.secret') as passwordf:
+    pw = passwordf.read()
 
 # Connect and bind to ldap
 l = ldap.initialize('ldap://localhost:389')
