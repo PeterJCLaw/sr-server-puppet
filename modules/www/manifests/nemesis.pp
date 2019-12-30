@@ -75,7 +75,7 @@ class www::nemesis ( $git_root, $root_dir ) {
     owner => 'wwwcontent',
     group => 'apache',
     mode => '0644',
-    source => 'puppet:///modules/www/nemesis.wsgi',
+    source => 'puppet:///modules/www/nemesis.wsgi.py',
     require => Vcsrepo[$root_dir],
   }
 
