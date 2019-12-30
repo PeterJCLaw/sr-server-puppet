@@ -5,7 +5,7 @@
 
 class www::nemesis ( $git_root, $root_dir ) {
   # Nemesis is a flask application
-  # An sqlite DB is used to store data, install the python bindings for it.
+  # An sqlite DB is used to store data
 
   $nemesis_db = "${root_dir}/nemesis/db/nemesis.sqlite"
 
