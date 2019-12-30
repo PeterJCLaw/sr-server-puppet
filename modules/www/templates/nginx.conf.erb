@@ -105,6 +105,15 @@ http {
             proxy_set_header Accept-Encoding "";
         }
 
+        location /userman/ {
+            proxy_pass http://unix:/var/run/nemesis/nemesis.socket:/;
+            proxy_pass_request_headers on;
+            proxy_set_header X-Real-IP          $remote_addr;
+            proxy_set_header X-Forwarded-For    $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto  https;
+            proxy_set_header Host               $host;
+        }
+
         # redirect server error pages to the static page /40x.html
         #
         #error_page  404              /404.html;

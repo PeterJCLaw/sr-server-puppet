@@ -4,18 +4,21 @@
 # too in the future.
 
 class www::nemesis ( $git_root, $root_dir ) {
-  # Nemesis is a flask application
+  # Nemesis is a flask application running under Gunicorn
   # An sqlite DB is used to store data
 
   $nemesis_db = "${root_dir}/nemesis/db/nemesis.sqlite"
 
-  package { 'sqlite':
+  package {[
+    'python2-gunicorn',
+    'sqlite',
+  ]:
     ensure  => present,
   }
 
   package { ['python-flask']:
     ensure  => present,
-    notify  => Service['httpd'],
+    notify  => Service['nemesis'],
   }
 
   # Main checkout of the Nemesis codebase
@@ -29,7 +32,7 @@ class www::nemesis ( $git_root, $root_dir ) {
     require => Package['python-flask',
                        'python-ldap',
                        'python-unidecode'],
-    notify => Service['httpd'],
+    notify => Service['nemesis'],
   }
 
   # Generate the SQLite DB for registration storage, unless it already
@@ -69,14 +72,34 @@ class www::nemesis ( $git_root, $root_dir ) {
     require => File["${root_dir}/nemesis/db"],
   }
 
-  # A WSGI config file for serving nemesis inside of apache.
-  file { "${root_dir}/nemesis/nemesis.wsgi":
+  # A WSGI config file for serving nemesis inside of gunicorn.
+  file { "${root_dir}/nemesis/wsgi.py":
     ensure => present,
     owner => 'wwwcontent',
     group => 'apache',
     mode => '0644',
     source => 'puppet:///modules/www/nemesis.wsgi.py',
     require => Vcsrepo[$root_dir],
+    notify  => Service['nemesis'],
+  }
+
+  file { '/var/run/nemesis':
+    ensure  => directory,
+    owner   => 'wwwcontent',
+    group   => 'apache',
+    mode    => '0644',
+  }
+
+  # Gunicorn service configuration file
+  $gunicorn_config = "${root_dir}/nemesis/nemesis.gunicorn-config.py"
+  file { $gunicorn_config:
+    ensure => present,
+    owner => 'wwwcontent',
+    group => 'apache',
+    mode => '0644',
+    source => 'puppet:///modules/www/nemesis.gunicorn-config.py',
+    require => [Vcsrepo[$root_dir], File['/var/run/nemesis']],
+    notify  => Service['nemesis'],
   }
 
   # Syslog configuration, using local0
@@ -136,5 +159,19 @@ class www::nemesis ( $git_root, $root_dir ) {
     minute => '*/2',
     user => 'wwwcontent',
     require => Vcsrepo[$root_dir],
+  }
+
+  # Not actually sure I like that gunicorn runs as a global service, but this is
+  # the simplest to get going with for now (rather than defining our own service).
+  sr_site::systemd_service { 'nemesis':
+    desc    => 'User management web interface',
+    dir     => $root_dir,
+    user    => 'wwwcontent',
+    command => "gunicorn --config=${gunicorn_config} nemesis.wsgi:application",
+    require   => [
+      Vcsrepo[$root_dir],
+      File[$gunicorn_config],
+      Package['python2-gunicorn'],
+    ],
   }
 }
