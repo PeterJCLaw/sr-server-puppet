@@ -73,6 +73,11 @@ class sr_site( $git_root ) {
     require => File['/usr/local/var/sr'],
   }
 
+  class { 'python':
+    manage_gunicorn => false,
+    virtualenv      => present,
+  }
+
   include sr_site::login
   include sr_site::meta
 

@@ -103,9 +103,6 @@ class www::ide ( $git_root, $root_dir, $team_status_imgs_live_dir ) {
   }
 
   # Virtual environment for the syntax checker
-  class { 'python':
-    virtualenv  => present,
-  }
   file { $venv_dir:
     ensure  => directory,
     owner   => 'wwwcontent',
