@@ -10,13 +10,13 @@ class www::nemesis ( $git_root, $root_dir ) {
   $nemesis_db = "${root_dir}/nemesis/db/nemesis.sqlite"
 
   package {[
-    'python2-gunicorn',
+    'python3-gunicorn',
     'sqlite',
   ]:
     ensure  => present,
   }
 
-  package { ['python-flask']:
+  package { ['python3-flask']:
     ensure  => present,
     notify  => Service['nemesis'],
   }
@@ -29,9 +29,9 @@ class www::nemesis ( $git_root, $root_dir ) {
     revision => 'origin/master',
     owner => 'wwwcontent',
     group => 'apache',
-    require => Package['python-flask',
-                       'python-ldap',
-                       'python-unidecode'],
+    require => Package['python3-flask',
+                       'python3-ldap',
+                       'python3-unidecode'],
     notify => Service['nemesis'],
   }
 
@@ -167,11 +167,11 @@ class www::nemesis ( $git_root, $root_dir ) {
     desc    => 'User management web interface',
     dir     => $root_dir,
     user    => 'wwwcontent',
-    command => "gunicorn --config=${gunicorn_config} nemesis.wsgi:application",
+    command => "/usr/bin/gunicorn-3 --config=${gunicorn_config} nemesis.wsgi:application",
     require   => [
       Vcsrepo[$root_dir],
       File[$gunicorn_config],
-      Package['python2-gunicorn'],
+      Package['python3-gunicorn'],
     ],
   }
 }

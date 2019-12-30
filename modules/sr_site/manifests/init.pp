@@ -91,10 +91,15 @@ class sr_site( $git_root ) {
     package { 'python-ldap':
       ensure => present,
     }
-    package { 'unidecode':
+    package { 'python-unidecode':
+      name      => 'unidecode',
       ensure    => present,
       provider  => 'pip',
-      alias     => 'python-unidecode',
+    }
+    package { 'python3-unidecode':
+      name      => 'unidecode',
+      ensure    => present,
+      provider  => 'pip3',
     }
 
     class { 'sr_site::openldap':
