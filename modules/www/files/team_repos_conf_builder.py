@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
-import sys
-import string
 import os
+import string
+import sys
+
 import ldap
 
 if len(sys.argv) != 2:
