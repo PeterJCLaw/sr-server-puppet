@@ -1,17 +1,20 @@
 #!/usr/bin/env python3
 
+import argparse
 import os
 import string
 import sys
 
 import ldap
 
-if len(sys.argv) != 2:
-    print("Usage: team_repo_conf_builder.py outputfile", file=sys.stderr)
-    sys.exit(1)
+def parse_args():
+    parser = argparse.ArgumentParser()
+    parser.add_argument('outputfile', type=argparse.FileType(mode='w'))
+    return parser.parse_args()
+
+args = parse_args()
 
 TEMPLATE_FILE = 'team_repos_conf_template.conf'
-OUTPUT_FILE = sys.argv[1]
 TEAM_START_MARKER = '## --PER-TEAM-START-- ##'
 TEAM_END_MARKER = '## --PER-TEAM-END-- ##'
 TEAM_PREFIX = 'team-'
@@ -81,5 +84,4 @@ new_content += ''.join(content[end_line:])
 # Ensure the following open file operation creates a file with mode 600
 os.umask(0o177)
 
-with open(OUTPUT_FILE, 'w') as f:
-    f.write(new_content)
+args.outputfile.write(new_content)
