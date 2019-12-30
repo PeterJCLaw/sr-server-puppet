@@ -1,9 +1,11 @@
-define sr_site::systemd_service($command,
-                        $user,
-                        $desc,
-                        $dir = undef,
-                        $depends = ['network.target'],
-                        $subs = []) {
+define sr_site::systemd_service(
+  $command,
+  $user,
+  $desc,
+  $dir = undef,
+  $depends = ['network.target'],
+  $subs = [],
+) {
   $service_name = "${title}.service"
   $service_file = "/etc/systemd/system/${service_name}"
 
