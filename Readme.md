@@ -33,7 +33,7 @@ We also have separate instructions for how to commission a
 
 ## Structure
 
-The services configured are broken into roughly three parts, based on their
+The services configured are broken into roughly two parts, based on their
 uses:
 
  - Competitor Services: things needed so that the competitors can compete -- the
