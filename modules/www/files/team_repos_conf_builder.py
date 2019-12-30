@@ -8,8 +8,8 @@ import os
 import ldap
 
 if len(sys.argv) != 2:
-	print("Usage: team_repo_conf_builder.py outputfile", file=sys.stderr)
-	sys.exit(1)
+    print("Usage: team_repo_conf_builder.py outputfile", file=sys.stderr)
+    sys.exit(1)
 
 TEMPLATE_FILE = 'team_repos_conf_template.conf'
 OUTPUT_FILE = sys.argv[1]
@@ -19,29 +19,29 @@ TEAM_PREFIX = 'team-'
 
 content = None
 with open(TEMPLATE_FILE) as f:
-	content = f.readlines()
+    content = f.readlines()
 
 start_line = -1
 end_line = -1
 
 line_no = 0
 for line in content:
-	line = line.strip()
-	if line == TEAM_START_MARKER:
-		start_line = line_no
+    line = line.strip()
+    if line == TEAM_START_MARKER:
+        start_line = line_no
 
-	if line == TEAM_END_MARKER and start_line >= 0:
-		end_line = line_no
-		break
+    if line == TEAM_END_MARKER and start_line >= 0:
+        end_line = line_no
+        break
 
-	line_no += 1
+    line_no += 1
 
 if start_line == -1:
-	print("Failed to find teams' start marker", file=sys.stderr)
+    print("Failed to find teams' start marker", file=sys.stderr)
 
 if end_line == -1:
-	print("Failed to find teams' end marker", file=sys.stderr)
-	exit(1)
+    print("Failed to find teams' end marker", file=sys.stderr)
+    exit(1)
 
 template_lines = content[ start_line + 1 : end_line ]
 #print template_lines
@@ -70,8 +70,8 @@ for team in teamlist:
     tlas.append(cn)
 
 for tla in tlas:
-	replaced = template_string.format(TLA=tla, team_prefix=TEAM_PREFIX)
-	replaced_content += replaced
+    replaced = template_string.format(TLA=tla, team_prefix=TEAM_PREFIX)
+    replaced_content += replaced
 
 #print replaced_content
 
@@ -83,4 +83,4 @@ new_content += ''.join(content[end_line:])
 os.umask(0o177)
 
 with open(OUTPUT_FILE, 'w') as f:
-	f.write(new_content)
+    f.write(new_content)
