@@ -1,6 +1,4 @@
-#!/usr/bin/env python
-
-from __future__ import print_function
+#!/usr/bin/env python3
 
 import sys
 import string
@@ -66,7 +64,7 @@ teamlist = l.search_ext_s("ou=groups,o=sr", ldap.SCOPE_ONELEVEL, "(cn=team-*)", 
 tlas = []
 for team in teamlist:
     dn, attrs = team
-    cn = attrs['cn'][0][5:]
+    cn = attrs['cn'][0][5:].decode('utf-8')
     tlas.append(cn)
 
 for tla in tlas:
