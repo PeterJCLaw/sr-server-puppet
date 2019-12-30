@@ -44,10 +44,10 @@ if end_line == -1:
     exit(1)
 
 template_lines = content[ start_line + 1 : end_line ]
-#print template_lines
+#print(template_lines)
 template_string = ''.join(template_lines)
 
-#print template_string
+#print(template_string)
 
 replaced_content = ''
 
@@ -73,7 +73,7 @@ for tla in tlas:
     replaced = template_string.format(TLA=tla, team_prefix=TEAM_PREFIX)
     replaced_content += replaced
 
-#print replaced_content
+#print(replaced_content)
 
 new_content = ''.join(content[:start_line + 1])
 new_content += replaced_content
