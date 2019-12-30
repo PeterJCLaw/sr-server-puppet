@@ -57,7 +57,10 @@ class sr_site( $git_root ) {
   include bee
 
   # Various common dependencies
-  package { 'PyYAML':
+  package {[
+    'PyYAML',
+    'python3-ldap',
+  ]:
     ensure => present,
   }
 

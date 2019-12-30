@@ -1,10 +1,6 @@
 # Backups make sure that we have all the datas, even if we don't have the server
 
 class sr_site::backup ( $git_root ) {
-  package { 'python3-ldap':
-    ensure  => present,
-  }
-
   # A checkout of the server backup git repo. The backup script has to exist at
   # a known location on the server so that we can configure sudo, so that the
   # 'backup' user can run backups as root.
