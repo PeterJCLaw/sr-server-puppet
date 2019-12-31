@@ -24,6 +24,7 @@ class www::teamgit( $ide_root_dir ) {
     cwd => '/usr/local/bin',
     require => [
       File[$teams_conf_builder],
+      File['/usr/local/bin/team_repos_conf_template.conf'],
       Package['python3-ldap'],
       Exec['pop_ldap'],
     ],
