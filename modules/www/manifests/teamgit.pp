@@ -23,7 +23,7 @@ class www::teamgit( $ide_root_dir ) {
     command => "${teams_conf_builder} /etc/httpd/conf.d/teamgit.conf",
     cwd => '/usr/local/bin',
     require => [File[$teams_conf_builder],
-                Package['python-ldap'], Exec['pop_ldap']],
+                Package['python3-ldap'], Exec['pop_ldap']],
     notify => Service['httpd'],
     user => 'root',
     provider => 'shell',
