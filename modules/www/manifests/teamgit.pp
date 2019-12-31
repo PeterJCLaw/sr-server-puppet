@@ -1,8 +1,6 @@
 # Provides access to the team's IDE git repos via HTTPS
 
 class www::teamgit( $ide_root_dir ) {
-
-  # WARNING: this variable also appears as a literal below.
   $teams_conf_builder = '/usr/local/bin/team_repos_conf_builder.py'
   file { $teams_conf_builder:
     ensure => present,
@@ -34,15 +32,6 @@ class www::teamgit( $ide_root_dir ) {
     # restarting the webserver every time, but that's unpleasent. So instead,
     # test to see whether any changes are going to occur, and only refresh if
     # they do.
-    onlyif => '\
-        tmpfile=`mktemp`;\
-        /usr/local/bin/team_repos_conf_builder.py  $tmpfile;\
-        cmp $tmpfile /etc/httpd/conf.d/teamgit.conf;\
-        res=$?;\
-        rm $tmpfile;\
-        if test $res = 0; then\
-            exit 1;\
-        fi;\
-        exit 0;'
+    unless => "${teams_conf_builder} - | cmp - /etc/httpd/conf.d/teamgit.conf",
   }
 }
