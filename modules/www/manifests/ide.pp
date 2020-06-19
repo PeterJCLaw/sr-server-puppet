@@ -114,7 +114,7 @@ class www::ide (
     ensure    => present,
     provider  => git,
     source    => "${git_root}/competition-simulator.git",
-    revision  => '0.2.0',
+    revision  => '8cb873af26d00eefb97417040b8b693b80cec658',
     user      => 'wwwcontent',
     require   => Vcsrepo[$root_dir],
   }
