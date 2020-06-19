@@ -133,6 +133,9 @@ class www::ide (
       fail('Invalid IDE development_target, must be either "simulator" or "robot-kit".')
     }
   }
+  package { 'gcc':
+    ensure  => present,
+  }
   file { $venv_dir:
     ensure  => directory,
     owner   => 'wwwcontent',
@@ -142,6 +145,7 @@ class www::ide (
   file { "${venv_dir}/lint-requirements.txt":
     ensure  => file,
     source  => "puppet:///modules/www/${lint_requirements}",
+    require => Package['gcc'],
   } ~>
   python::virtualenv { $venv_dir:
     ensure          => present,
