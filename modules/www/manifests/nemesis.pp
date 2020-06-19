@@ -83,6 +83,8 @@ class www::nemesis ( $git_root, $root_dir ) {
     notify  => Service['nemesis'],
   }
 
+  # TODO: need to ensure this is present after a reboot!
+  # TODO: ensure nginx can read this!
   file { '/var/run/nemesis':
     ensure  => directory,
     owner   => 'wwwcontent',
