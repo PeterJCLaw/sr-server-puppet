@@ -10,7 +10,7 @@ class www::ide ( $git_root, $root_dir, $team_status_imgs_live_dir ) {
     provider => git,
     source => "${git_root}/srobo-ide.git",
     revision => 'origin/master',
-    user =>'wwwcontent',
+    user => 'wwwcontent',
     # Depend explicitly on PHP here since it's declared at the level above
     require => Package['php', 'php-json', 'php-ldap'],
   }
