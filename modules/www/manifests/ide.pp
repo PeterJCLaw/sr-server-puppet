@@ -118,6 +118,7 @@ class www::ide ( $git_root, $root_dir, $team_status_imgs_live_dir ) {
     ensure_venv_dir => false,
     owner           => 'wwwcontent',
     group           => 'apache',
+    distribute      => false,
     requirements    => "${venv_dir}/lint-requirements.txt",
     require         => Class['python'],
     virtualenv      => 'python -m virtualenv',
