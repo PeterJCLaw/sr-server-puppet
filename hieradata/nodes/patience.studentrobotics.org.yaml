@@ -11,3 +11,5 @@ www_base_hostname: studentrobotics.org
 www_canonical_hostname: www.studentrobotics.org
 
 static_tls_certificate: false
+
+ide_development_target: simulator
