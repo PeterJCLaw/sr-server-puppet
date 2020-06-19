@@ -1,8 +1,14 @@
 # The IDE. Here be dragons.
 
-class www::ide ( $git_root, $root_dir, $team_status_imgs_live_dir ) {
+class www::ide (
+  $git_root,
+  $root_dir,
+  $team_status_imgs_live_dir,
+  Enum['robot-kit', 'simulator'] $development_target,
+) {
   $ide_repos_root = "${root_dir}/repos"
   $venv_dir = "${root_dir}/venv"
+  $simulator_dir = "${root_dir}/competition-simulator"
 
   # Checkout of cyanide, acts as backend and serves the frontend of the IDE.
   vcsrepo { $root_dir:
@@ -102,7 +108,31 @@ class www::ide ( $git_root, $root_dir, $team_status_imgs_live_dir ) {
     require => Vcsrepo[$root_dir],
   }
 
+  # Competition Simular checkout; used as both a lint reference and archive
+  # builder when serving simulator mode.
+  vcsrepo { $simulator_dir:
+    ensure    => present,
+    provider  => git,
+    source    => "${git_root}/competition-simulator.git",
+    revision  => '0.2.0',
+    user      => 'wwwcontent',
+    require   => Vcsrepo[$root_dir],
+  }
+
   # Virtual environment for the syntax checker
+  case $development_target {
+    'robot-kit': {
+      $python_version = '2'
+      $lint_requirements = 'ide-lint-requirements.txt'
+    }
+    'simulator': {
+      $python_version = '3'
+      $lint_requirements = 'ide-lint-requirements-simulator.txt'
+    }
+    default: {
+      fail('Invalid IDE development_target, must be either "simulator" or "robot-kit".')
+    }
+  }
   file { $venv_dir:
     ensure  => directory,
     owner   => 'wwwcontent',
@@ -111,7 +141,7 @@ class www::ide ( $git_root, $root_dir, $team_status_imgs_live_dir ) {
   } ->
   file { "${venv_dir}/lint-requirements.txt":
     ensure  => file,
-    source  => 'puppet:///modules/www/ide-lint-requirements.txt',
+    source  => "puppet:///modules/www/${lint_requirements}",
   } ~>
   python::virtualenv { $venv_dir:
     ensure          => present,
@@ -119,9 +149,10 @@ class www::ide ( $git_root, $root_dir, $team_status_imgs_live_dir ) {
     owner           => 'wwwcontent',
     group           => 'apache',
     distribute      => false,
+    version         => $python_version,
     requirements    => "${venv_dir}/lint-requirements.txt",
-    require         => Class['python'],
-    virtualenv      => 'python -m virtualenv',
+    require         => [Class['python'], Package['python3-virtualenv']],
+    virtualenv      => "python${$python_version} -m virtualenv",
   }
 
   # Team Status dir. Contains post-reviewed team-status images

@@ -35,3 +35,9 @@ announce.enabled = true
 
 pylint.path = <%= @venv_dir %>/bin/pylint
 python.path = <%= @venv_dir %>/bin/python
+
+<% if @development_target == 'simulator' %>
+pylint.reference_dir = <%= @simulator_dir %>/modules
+lib_robot.dir = <%= @simulator_dir %>
+lib_robot.archive_script = script/create-ide-archive
+<% end %>

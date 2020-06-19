@@ -93,6 +93,8 @@ ide_ldap_user_pw: '123456'
 # Password for IDE's LDAP account, in LDAP internal form. See ldap_anon_user_ssha_pw
 ide_ldap_user_ssha_pw: '{SSHA}1NJFqzohn1w4jH1sb+B2CWbgqirrleQ3'
 
+# The development target the IDE is configured for. One of 'simulator' or 'robot-kit'
+ide_development_target: robot-kit
 
 # Piwik
 

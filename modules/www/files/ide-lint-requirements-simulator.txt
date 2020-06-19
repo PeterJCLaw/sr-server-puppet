@@ -1,0 +1,6 @@
+# Packages to do the actual linting
+
+astroid==2.4.2
+pylint==2.5.3
+
+# TODO: add the packages which are available when run at the competition.

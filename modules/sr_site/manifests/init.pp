@@ -101,6 +101,9 @@ class sr_site( $git_root ) {
       ensure    => present,
       provider  => 'pip3',
     }
+    package { 'python3-virtualenv':
+      ensure    => present,
+    }
 
     class { 'sr_site::openldap':
       require => File['/usr/local/var/sr'],

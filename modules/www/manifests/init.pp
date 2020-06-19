@@ -75,6 +75,7 @@ class www( $git_root ) {
       git_root => $git_root,
       root_dir => "${web_root_dir}/ide",
       team_status_imgs_live_dir => "${web_root_dir}/team-images",
+      development_target => lookup('ide_development_target'),
       require => [User['wwwcontent'], File[$web_root_dir]],
     }
 
