@@ -24,6 +24,10 @@ class www::code_submitter  (
     notify  => Exec['install-database'],
   }
 
+  package { 'make':
+    ensure  => present,
+  }
+
   $deploy_requirements = "${root_dir}/deploy-requirements.txt"
   file { $deploy_requirements:
     ensure  => present,
@@ -31,7 +35,7 @@ class www::code_submitter  (
     group   => 'apache',
     mode    => '0640',
     source  => "puppet:///modules/www/code-submitter-requirements.txt",
-    require => Vcsrepo[$root_dir],
+    require => [Vcsrepo[$root_dir], Package['make']],
   }
 
   $venv_dir = "${root_dir}/venv"
