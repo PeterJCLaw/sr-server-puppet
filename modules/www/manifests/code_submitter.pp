@@ -10,18 +10,17 @@ class www::code_submitter  (
     revision  => 'origin/master',
     owner     => 'wwwcontent',
     group     => 'apache',
-    notify    => Exec['install-database'],
   }
 
   $verify_tls = !$devmode
-  file { "${root_dir}/.env":
+  $env_file = "${root_dir}/.env"
+  file { $env_file:
     ensure  => present,
     owner   => 'wwwcontent',
     group   => 'apache',
     mode    => '0640',
     content => template('www/code-submitter.env.erb'),
     require => Vcsrepo[$root_dir],
-    notify  => Exec['install-database'],
   }
 
   package { 'make':
@@ -48,6 +47,7 @@ class www::code_submitter  (
     requirements    => $deploy_requirements,
     require         => [Class['python'], Package['python3-virtualenv']],
     virtualenv      => 'python3 -m virtualenv',
+    subscribe       => Vcsrepo[$root_dir],
   }
 
   # Create/upgrade the database schema
@@ -57,7 +57,11 @@ class www::code_submitter  (
     group       => 'apache',
     cwd         => $root_dir,
     environment => "PYTHONPATH=${root_dir}",
-    require     => Python::Virtualenv[$venv_dir],
+    subscribe   => [
+      Vcsrepo[$root_dir],
+      Python::Virtualenv[$venv_dir],
+      File[$env_file],
+    ],
   }
 
   # TODO: need to ensure this is present after a reboot!
@@ -75,10 +79,11 @@ class www::code_submitter  (
     dir     => $root_dir,
     user    => 'wwwcontent',
     command => "${venv_dir}/bin/uvicorn code_submitter.server:app --uds ${socket_dir}/code-submitter.socket",
-    require => [
+    require => File[$socket_dir],
+    subscribe => [
       Vcsrepo[$root_dir],
       Python::Virtualenv[$venv_dir],
-      File[$socket_dir],
+      File[$env_file],
     ],
   }
 }
