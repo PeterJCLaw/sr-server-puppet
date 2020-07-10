@@ -1,0 +1,5 @@
+-r requirements.txt
+
+# Latest at the time of writing. Don't actually care about the version,
+# only that we pin it for stability.
+uvicorn==0.11.5

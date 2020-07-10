@@ -86,6 +86,13 @@ class www( $git_root ) {
       require => [User['wwwcontent'], File[$web_root_dir]],
     }
 
+    # Code Submission Service for the Virtual Competition
+    class { 'www::code_submitter':
+      git_root => $git_root,
+      root_dir => '/srv/code-submitter',
+      require => User['wwwcontent'],
+    }
+
     # Web facing user managment interface, srobo.org/userman
     class { 'www::nemesis':
       git_root => $git_root,
