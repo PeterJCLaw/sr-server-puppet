@@ -78,7 +78,7 @@ class www::code_submitter  (
     desc    => 'Code Submission Service',
     dir     => $root_dir,
     user    => 'wwwcontent',
-    command => "${venv_dir}/bin/uvicorn code_submitter.server:app --uds ${socket_dir}/code-submitter.socket --forwarded-allow-ips='*' --root-path /code-submitter/",
+    command => "${venv_dir}/bin/uvicorn code_submitter.server:app --uds ${socket_dir}/code-submitter.socket --forwarded-allow-ips='*' --root-path /code-submitter",
     require => File[$socket_dir],
     subscribe => [
       Vcsrepo[$root_dir],
