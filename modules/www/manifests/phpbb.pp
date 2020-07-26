@@ -165,9 +165,9 @@ class www::phpbb ( $git_root, $root_dir ) {
 
   docker::run { 'phpbb':
     image   => 'bitnami/phpbb',
-    # Connection port 8080 outside the container (i.e: from nginx) to port 80
-    # inside the container (i.e: the apache there running the forum)
-    ports   => '8080:80',
+    # Connect to localhost:8080 outside the container (i.e: from nginx) to
+    # port 80 inside the container (i.e: the apache there running the forum)
+    ports   => '127.0.0.1:8080:80',
     env     => [
       "MARIADB_HOST=${host_ip_from_within_container}",
       "PHPBB_DATABASE_NAME=${forum_db_name}",
