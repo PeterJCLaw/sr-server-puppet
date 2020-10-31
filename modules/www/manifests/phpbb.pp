@@ -6,7 +6,7 @@ class www::phpbb ( $git_root, $root_dir ) {
   $forum_user = hiera('phpbb_sql_user')
   $forum_pw = hiera('phpbb_sql_pw')
 
-  $phpbb_version = '3.2.8'
+  $phpbb_version = '3.3.1'
   package { ['php-mbstring', 'php-pdo', 'php-xml']:
     ensure => latest,
     notify => Service['httpd'],
