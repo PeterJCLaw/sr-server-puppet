@@ -7,7 +7,7 @@ class www::phpbb ( $git_root, $root_dir ) {
   $forum_pw = hiera('phpbb_sql_pw')
 
   $phpbb_version = '3.3.1'
-  package { ['php-mbstring', 'php-pdo', 'php-xml']:
+  package { ['php-mbstring', 'php-pecl-zip', 'php-pdo', 'php-xml']:
     ensure => latest,
     notify => Service['httpd'],
   }
@@ -65,7 +65,7 @@ class www::phpbb ( $git_root, $root_dir ) {
       # Dependencies needed for this command to even run
       Package['php-cli', 'php-json'],
       # Dependencies needed by the things which this installs
-      Package['php-mbstring', 'php-pdo', 'php-xml'],
+      Package['php-mbstring', 'php-pecl-zip', 'php-pdo', 'php-xml'],
     ],
   }
 
