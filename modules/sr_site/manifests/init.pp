@@ -78,6 +78,7 @@ class sr_site( $git_root ) {
   }
 
   class { 'python':
+    version         => 'python3',
     manage_gunicorn => false,
     virtualenv      => present,
   }
@@ -96,9 +97,6 @@ class sr_site( $git_root ) {
       name      => 'unidecode',
       ensure    => present,
       provider  => 'pip3',
-    }
-    package { 'python3-virtualenv':
-      ensure    => present,
     }
 
     class { 'sr_site::openldap':

@@ -155,7 +155,7 @@ class www::ide (
     distribute      => false,
     version         => $python_version,
     requirements    => "${venv_dir}/lint-requirements.txt",
-    require         => [Class['python'], Package['python3-virtualenv']],
+    require         => Class['python'],
     virtualenv      => "python${$python_version} -m virtualenv",
   }
 
