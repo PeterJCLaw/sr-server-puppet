@@ -14,7 +14,7 @@ class www::phpbb ( $git_root, $root_dir ) {
     ensure => present,
     provider => git,
     source => 'https://github.com/phpbb/phpbb.git',
-    revision => "release-${$phpbb_version}",
+    revision => "release-${phpbb_version}",
   }
 
   # Create the MySQL db for the forum
