@@ -29,9 +29,13 @@ class sr_site( $git_root ) {
     require => File['/usr/local/var'],
   }
 
-  # Choose speedy yum mirrors
-  package { 'yum-plugin-fastestmirror':
-    ensure => latest,
+  # Make DNF fast
+  augeas { 'speedy dnf':
+    context => '/etc/dnf/dnf.conf',
+    changes => [
+      'set fastestmirror True',
+      'set deltarpm True',
+    ],
   }
 
   # Fedora no longer ships with a cron installed by default, I chose one at random

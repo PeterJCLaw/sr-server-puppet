@@ -31,7 +31,9 @@ Vagrant.configure("2") do |config|
 
     # Bootstrap
     config.vm.provision "shell", inline: "grep 'obsoletes=0' /etc/dnf/dnf.conf || echo 'obsoletes=0' >> /etc/dnf/dnf.conf"
-    config.vm.provision "shell", inline: "yum install -y puppet git"
+    config.vm.provision "shell", inline: "grep -i 'fastestmirror=True' /etc/dnf/dnf.conf || echo 'fastestmirror=True' >> /etc/dnf/dnf.conf"
+    config.vm.provision "shell", inline: "grep -i 'deltarpm=True' /etc/dnf/dnf.conf || echo 'deltarpm=True' >> /etc/dnf/dnf.conf"
+    config.vm.provision "shell", inline: "dnf install --assumeyes puppet git"
 
     config.vm.provision "puppet" do |puppet|
         puppet.hiera_config_path    = "hiera.yaml"
