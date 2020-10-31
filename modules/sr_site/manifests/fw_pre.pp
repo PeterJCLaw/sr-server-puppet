@@ -62,11 +62,13 @@ class sr_site::fw_pre {
     action => 'accept',
   }
 
-  # Allow everyone to connect to the anonymous git service.
-  sr_site::fw_pre::common_rule { '003 git':
-    proto => 'tcp',
-    dport => 9418,
-    action => 'accept',
+  if hiera('volunteer_services') {
+    # Allow everyone to connect to the anonymous git service.
+    sr_site::fw_pre::common_rule { '003 git':
+      proto => 'tcp',
+      dport => 9418,
+      action => 'accept',
+    }
   }
 
   # Allow everyone to connect to the HTTP website.
