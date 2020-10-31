@@ -66,8 +66,9 @@ class www( $git_root ) {
 
     # phpBB forum, at srobo.org/forum
     class { 'www::phpbb':
-      git_root => $git_root,
-      root_dir => '/srv/phpbb',
+      git_root  => $git_root,
+      root_dir  => '/var/www/phpbb',
+      require   => User['wwwcontent'],
     }
 
     # The IDE, srobo.org/ide
