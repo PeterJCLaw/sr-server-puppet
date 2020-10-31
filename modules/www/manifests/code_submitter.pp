@@ -44,10 +44,22 @@ class www::code_submitter  (
     group           => 'apache',
     distribute      => false,
     version         => '3',
-    requirements    => $deploy_requirements,
     require         => [Class['python'], Package['python3-virtualenv']],
     virtualenv      => 'python3 -m virtualenv',
     subscribe       => Vcsrepo[$root_dir],
+  }
+
+  # Work around python::virtualenv's requirements handling blocking use of
+  # binary packages:
+  python::requirements { $venv_dir:
+    owner           => 'wwwcontent',
+    group           => 'apache',
+    virtualenv      => $venv_dir,
+    requirements    => $deploy_requirements,
+    subscribe       => [
+      Vcsrepo[$root_dir],
+      Python::Virtualenv[$venv_dir],
+    ],
   }
 
   # Create/upgrade the database schema
@@ -60,6 +72,7 @@ class www::code_submitter  (
     subscribe   => [
       Vcsrepo[$root_dir],
       Python::Virtualenv[$venv_dir],
+      Python::Requirements[$venv_dir],
       File[$env_file],
     ],
   }
@@ -83,6 +96,7 @@ class www::code_submitter  (
     subscribe => [
       Vcsrepo[$root_dir],
       Python::Virtualenv[$venv_dir],
+      Python::Requirements[$venv_dir],
       File[$env_file],
     ],
   }
