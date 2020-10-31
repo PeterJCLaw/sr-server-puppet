@@ -9,7 +9,7 @@ class sr_site::trac ( $git_root ) {
   $mysql_trac_pw = hiera('mysql_trac_pw')
   $trac_env_root = '/srv/trac'
 
-  package { ['trac', 'MySQL-python', 'python-pygments', 'trac-xmlrpc-plugin']:
+  package { ['trac', 'MySQL-python', 'python3-pygments', 'trac-xmlrpc-plugin']:
     ensure => latest,
   }
 

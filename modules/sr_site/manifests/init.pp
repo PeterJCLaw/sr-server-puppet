@@ -62,7 +62,7 @@ class sr_site( $git_root ) {
 
   # Various common dependencies
   package {[
-    'PyYAML',
+    'python3-pyyaml',
     'python3-ldap',
   ]:
     ensure => present,
@@ -92,14 +92,6 @@ class sr_site( $git_root ) {
   }
 
   if $competitor_services {
-    package { 'python-ldap':
-      ensure => present,
-    }
-    package { 'python-unidecode':
-      name      => 'unidecode',
-      ensure    => present,
-      provider  => 'pip',
-    }
     package { 'python3-unidecode':
       name      => 'unidecode',
       ensure    => present,
