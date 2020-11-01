@@ -145,11 +145,26 @@ class www::phpbb ( $git_root, $root_dir ) {
     group => 'apache',
     mode => '2770',
     require => Vcsrepo[$root_dir],
+  } ->
+  file { "${root_dir}/phpBB/cache/production":
+    # Clear the cache every time we run. This is a workaround for puppet not
+    # getting the permissions right on these folders.
+    ensure  => absent,
+    force   => true,
   }
 
   # Not the foggiest, but this is how it was on optimus, so this is configured
   # thus here too.
   file { "${root_dir}/phpBB/store":
+    ensure => directory,
+    owner => 'wwwcontent',
+    group => 'apache',
+    mode => '2770',
+    require => Vcsrepo[$root_dir],
+  }
+
+  # Directory recommended by phpbb be writable
+  file { "${root_dir}/phpBB/images/avatars/upload":
     ensure => directory,
     owner => 'wwwcontent',
     group => 'apache',
