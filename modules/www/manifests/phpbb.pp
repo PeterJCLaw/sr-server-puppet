@@ -2,7 +2,7 @@
 
 class www::phpbb ( $git_root, $root_dir ) {
   # MySQL database configuration
-  $forum_db_name = 'phpbb_sr2020'
+  $forum_db_name = 'phpbb_sr'
   $forum_user = hiera('phpbb_sql_user')
   $forum_pw = hiera('phpbb_sql_pw')
 
