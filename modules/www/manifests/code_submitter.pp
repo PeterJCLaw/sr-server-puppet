@@ -44,7 +44,7 @@ class www::code_submitter  (
     group           => 'apache',
     distribute      => false,
     version         => '3',
-    require         => [Class['python'], Package['python3-virtualenv']],
+    require         => Class['python'],
     virtualenv      => 'python3 -m virtualenv',
     subscribe       => Vcsrepo[$root_dir],
   }

@@ -6,15 +6,22 @@ class www::phpbb ( $git_root, $root_dir ) {
   $forum_user = hiera('phpbb_sql_user')
   $forum_pw = hiera('phpbb_sql_pw')
 
-  $host_ip_from_within_container = '172.17.0.1'
-  $phpbb_version = '3.2.8'
+  $phpbb_version = '3.3.1'
+  package { ['php-mbstring', 'php-pecl-zip', 'php-pdo', 'php-xml']:
+    ensure => latest,
+    notify => Service['httpd'],
+  }
 
   # Checkout of the phpbb sources
   vcsrepo { $root_dir:
     ensure => present,
+    owner => 'wwwcontent',
+    group => 'apache',
     provider => git,
     source => 'https://github.com/phpbb/phpbb.git',
     revision => "release-${phpbb_version}",
+    # Direct dependencies of PHPBB
+    require => Package[ 'php', 'php-ldap', 'php-mysqlnd' ],
   }
 
   # Create the MySQL db for the forum
@@ -33,24 +40,40 @@ class www::phpbb ( $git_root, $root_dir ) {
     require => Mysql::Db[$forum_db_name],
   }
 
-  # Convince the Docker image that the database (etc.) is already configured
-  file { "${root_dir}/phpBB/.initialized":
+  # Maintain permissions on the config file, and template it. Contains SQL
+  # connection gunge.
+  file { "${root_dir}/phpBB/config.php":
     ensure => present,
-    content => '',
-    require => Vcsrepo[$root_dir],
-  }
-  file { "${root_dir}/phpBB/.restored":
-    ensure => present,
-    content => '',
+    owner => 'wwwcontent',
+    group => 'apache',
+    mode => '0640',
+    content => template('www/forum_config.php.erb'),
     require => Vcsrepo[$root_dir],
   }
 
-  # Maintain permissions on the config file, and template it. Contains SQL
-  # connection gunge.
-  $config_file = "${root_dir}/phpBB/config.php"
-  file { $config_file:
-    ensure => present,
-    content => template('www/forum_config.php.erb'),
+  exec { 'phpbb-composer-install':
+    command     => '/usr/bin/php ../composer.phar install',
+    provider    => 'shell',
+    cwd         => "${root_dir}/phpBB",
+    user        => 'wwwcontent',
+    group       => 'apache',
+    environment => [ 'HOME=/home/wwwcontent', ],
+    refreshonly => true,
+    subscribe   => Vcsrepo[$root_dir],
+    require     => [
+      File['/home/wwwcontent'],
+      # Dependencies needed for this command to even run
+      Package['php-cli', 'php-json'],
+      # Dependencies needed by the things which this installs
+      Package['php-mbstring', 'php-pecl-zip', 'php-pdo', 'php-xml'],
+    ],
+  }
+
+  # Remove the install directory since we're restoring from a database
+  # dump instead. Needed before the forums will serve the actual forums.
+  file { "${root_dir}/phpBB/install":
+    ensure  => absent,
+    force   => true,
     require => Vcsrepo[$root_dir],
   }
 
@@ -61,28 +84,26 @@ class www::phpbb ( $git_root, $root_dir ) {
     extension     => 'zip',
     digest_string => 'b113e13d07cb0cb17742b49628d2184e',
     digest_type   => 'md5',
+    user          => 'wwwcontent',
     target        => "${root_dir}/phpBB/styles",
     # where it downloads the file to, also where it puts the .md5 file
     src_target    => $root_dir,
     require       => Vcsrepo[$root_dir],
   }
 
-  file { "${root_dir}/phpBB/ext":
-    ensure  => directory,
-    mode    => '0755',
-    require => Vcsrepo[$root_dir],
-  }
-
   # Our custom extensions
   $extensions_dir = "${root_dir}/phpBB/ext/sr"
   file { $extensions_dir:
     ensure  => directory,
+    owner   => 'wwwcontent',
+    group   => 'apache',
     mode    => '0755',
-    require => File["${root_dir}/phpBB/ext"],
+    require => Vcsrepo[$root_dir],
   }
 
   vcsrepo { "${extensions_dir}/etc":
     ensure    => present,
+    user      => 'wwwcontent',
     provider  => git,
     source    => "${git_root}/phpbb-ext-sr-etc.git",
     revision  => 'origin/master',
@@ -92,12 +113,15 @@ class www::phpbb ( $git_root, $root_dir ) {
   # Extension for slack integration
   file { "${root_dir}/phpBB/ext/TheH":
     ensure  => directory,
+    owner   => 'wwwcontent',
+    group   => 'apache',
     mode    => '0755',
-    require => File["${root_dir}/phpBB/ext"],
+    require => Vcsrepo[$root_dir],
   }
 
   vcsrepo { "${root_dir}/phpBB/ext/TheH/entropy":
     ensure    => present,
+    user      => 'wwwcontent',
     provider  => git,
     source    => 'https://github.com/haivala/phpBB-Entropy-Extension',
     revision  => '61390529da8e49a7aa306dcf33046659e1bbc0f6', # pin so upgrades are explicit
@@ -108,75 +132,43 @@ class www::phpbb ( $git_root, $root_dir ) {
   $attachments_dir = "${root_dir}/phpBB/files"
   file { $attachments_dir:
     ensure => directory,
+    owner => 'wwwcontent',
+    group => 'apache',
     mode => '2770',
     require => Vcsrepo[$root_dir],
+  }
+
+  # Some form of forum page cache
+  file { "${root_dir}/phpBB/cache":
+    ensure => directory,
+    owner => 'wwwcontent',
+    group => 'apache',
+    mode => '2770',
+    require => Vcsrepo[$root_dir],
+  } ->
+  file { "${root_dir}/phpBB/cache/production":
+    # Clear the cache every time we run. This is a workaround for puppet not
+    # getting the permissions right on these folders.
+    ensure  => absent,
+    force   => true,
   }
 
   # Not the foggiest, but this is how it was on optimus, so this is configured
   # thus here too.
   file { "${root_dir}/phpBB/store":
     ensure => directory,
+    owner => 'wwwcontent',
+    group => 'apache',
     mode => '2770',
     require => Vcsrepo[$root_dir],
   }
 
-  vcsrepo { "${root_dir}/python-port-forward":
-    ensure    => present,
-    provider  => git,
-    source    => 'https://github.com/cgx027/python-port-forward',
-    revision  => 'dc6657b28d52091d5b9909b32c243fdeb82a9059',
-  } ->
-  file { "${root_dir}/python-port-forward/port-forward.config":
-    content  => template('www/port-forward.config.erb'),
-  }
-
-  sr_site::systemd_service { 'phpbb-port-forward':
-    desc    => 'Forwards ports from the host for access from within the PHPBB Docker container.',
-    dir     => "${root_dir}/python-port-forward",
-    user    => 'root',
-    command => "/usr/bin/python port-forward.py",
-    subs    => [
-      File["${root_dir}/python-port-forward/port-forward.config"],
-      Vcsrepo["${root_dir}/python-port-forward"],
-    ]
-  }
-
-  yumrepo { 'docker':
-    descr     => 'Docker CE Stable - $basearch',
-    ensure    => present,
-    baseurl   => 'https://download.docker.com/linux/fedora/$releasever/$basearch/stable',
-    gpgcheck  => true,
-    gpgkey    => 'https://download.docker.com/linux/fedora/gpg',
-  } ->
-
-  class { 'docker':
-    use_upstream_package_source => false,
-  }
-
-  # Restart docker whenever the firewall rules are updated. This is needed
-  # because puppet removes all firewall rules it doesn't know about, including
-  # those which docker puts in place (and needs). Restarting the docker service
-  # gets docker to put them back again. Yeah, it's ugly but it works.
-  Resources['firewall'] ~> Service['docker']
-
-  docker::image { 'bitnami/phpbb':
-    image_tag => $phpbb_version,
-  }
-
-  docker::run { 'phpbb':
-    image   => 'bitnami/phpbb',
-    # Connect to localhost:8080 outside the container (i.e: from nginx) to
-    # port 80 inside the container (i.e: the apache there running the forum)
-    ports   => '127.0.0.1:8080:80',
-    env     => [
-      "MARIADB_HOST=${host_ip_from_within_container}",
-      "PHPBB_DATABASE_NAME=${forum_db_name}",
-      "PHPBB_DATABASE_USER=${forum_user}",
-      "PHPBB_DATABASE_PASSWORD=${forum_pw}",
-    ],
-    volumes => [
-      "${root_dir}/phpBB:/bitnami/phpbb",
-    ],
-    require => Vcsrepo["${root_dir}/python-port-forward"],
+  # Directory recommended by phpbb be writable
+  file { "${root_dir}/phpBB/images/avatars/upload":
+    ensure => directory,
+    owner => 'wwwcontent',
+    group => 'apache',
+    mode => '2770',
+    require => Vcsrepo[$root_dir],
   }
 }

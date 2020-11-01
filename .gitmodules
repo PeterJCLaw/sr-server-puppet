@@ -39,7 +39,4 @@
 	url = https://github.com/puppetlabs/puppetlabs-inifile
 [submodule "modules/python"]
 	path = modules/python
-	url = https://github.com/voxpupuli/puppet-python
-[submodule "modules/docker"]
-	path = modules/docker
-	url = https://github.com/puppetlabs/puppetlabs-docker
+	url = https://github.com/PeterJCLaw/puppet-python

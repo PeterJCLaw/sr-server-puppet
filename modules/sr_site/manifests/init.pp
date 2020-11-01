@@ -29,9 +29,13 @@ class sr_site( $git_root ) {
     require => File['/usr/local/var'],
   }
 
-  # Choose speedy yum mirrors
-  package { 'yum-plugin-fastestmirror':
-    ensure => latest,
+  # Make DNF fast
+  augeas { 'speedy dnf':
+    context => '/etc/dnf/dnf.conf',
+    changes => [
+      'set fastestmirror True',
+      'set deltarpm True',
+    ],
   }
 
   # Fedora no longer ships with a cron installed by default, I chose one at random
@@ -58,7 +62,7 @@ class sr_site( $git_root ) {
 
   # Various common dependencies
   package {[
-    'PyYAML',
+    'python3-pyyaml',
     'python3-ldap',
   ]:
     ensure => present,
@@ -74,6 +78,7 @@ class sr_site( $git_root ) {
   }
 
   class { 'python':
+    version         => 'python3',
     manage_gunicorn => false,
     virtualenv      => present,
   }
@@ -88,21 +93,10 @@ class sr_site( $git_root ) {
   }
 
   if $competitor_services {
-    package { 'python-ldap':
-      ensure => present,
-    }
-    package { 'python-unidecode':
-      name      => 'unidecode',
-      ensure    => present,
-      provider  => 'pip',
-    }
     package { 'python3-unidecode':
       name      => 'unidecode',
       ensure    => present,
       provider  => 'pip3',
-    }
-    package { 'python3-virtualenv':
-      ensure    => present,
     }
 
     class { 'sr_site::openldap':

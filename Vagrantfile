@@ -11,7 +11,7 @@ Vagrant.configure("2") do |config|
     #   vagrant plugin install vagrant-vbguest
     #
     # which will ensure that the versions match when you provision the VM.
-    config.vm.box = "fedora/30-cloud-base"
+    config.vm.box = "fedora/33-cloud-base"
 
     config.vm.provider "virtualbox" do |v|
         # The box defaults to 512, things are smoother if we have more
@@ -31,7 +31,9 @@ Vagrant.configure("2") do |config|
 
     # Bootstrap
     config.vm.provision "shell", inline: "grep 'obsoletes=0' /etc/dnf/dnf.conf || echo 'obsoletes=0' >> /etc/dnf/dnf.conf"
-    config.vm.provision "shell", inline: "yum install -y puppet git"
+    config.vm.provision "shell", inline: "grep -i 'fastestmirror=True' /etc/dnf/dnf.conf || echo 'fastestmirror=True' >> /etc/dnf/dnf.conf"
+    config.vm.provision "shell", inline: "grep -i 'deltarpm=True' /etc/dnf/dnf.conf || echo 'deltarpm=True' >> /etc/dnf/dnf.conf"
+    config.vm.provision "shell", inline: "dnf install --assumeyes puppet git"
 
     config.vm.provision "puppet" do |puppet|
         puppet.hiera_config_path    = "hiera.yaml"
