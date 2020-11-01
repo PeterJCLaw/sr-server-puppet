@@ -20,7 +20,7 @@ We also have separate instructions for how to commission a
 ## Vagrant Setup
 
 1. Initialise the submodules (`git submodule update --init --recursive`)
-2. Clone the dummy-secrets alongside this repo (`git clone git://srobo.org/server/dummy-secrets.git ../dummy-secrets`)
+2. Clone the dummy-secrets alongside this repo (`git clone https://github.com/srobo/server-dummy-secrets ../dummy-secrets`)
 3. Install VirtualBox, usually in your distro's repos, or https://www.virtualbox.org/wiki/Downloads
 4. Install Vagrant, usually in your distro's repos, or http://www.vagrantup.com/downloads.html
 5. Run `vagrant up --provision`
