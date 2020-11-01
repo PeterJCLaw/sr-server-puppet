@@ -11,6 +11,10 @@ Type=simple
 WorkingDirectory=<%= @start_dir %>
 <% end %>
 
+<% if @runtime_dir %>
+RuntimeDirectory=<%= @runtime_dir %>
+<% end %>
+
 ExecStart=<%= @start_command %>
 
 [Install]

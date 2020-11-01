@@ -3,6 +3,7 @@ define sr_site::systemd_service(
   $user,
   $desc,
   $dir = undef,
+  $runtime_dir = undef,
   $depends = ['network.target'],
   $subs = [],
 ) {

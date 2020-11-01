@@ -83,15 +83,6 @@ class www::nemesis ( $git_root, $root_dir ) {
     notify  => Service['nemesis'],
   }
 
-  # TODO: need to ensure this is present after a reboot!
-  # TODO: ensure nginx can read this!
-  file { '/var/run/nemesis':
-    ensure  => directory,
-    owner   => 'wwwcontent',
-    group   => 'apache',
-    mode    => '0644',
-  }
-
   # Gunicorn service configuration file
   $gunicorn_config = "${root_dir}/nemesis/nemesis.gunicorn-config.py"
   file { $gunicorn_config:
@@ -100,7 +91,7 @@ class www::nemesis ( $git_root, $root_dir ) {
     group => 'apache',
     mode => '0644',
     source => 'puppet:///modules/www/nemesis.gunicorn-config.py',
-    require => [Vcsrepo[$root_dir], File['/var/run/nemesis']],
+    require => Vcsrepo[$root_dir],
     notify  => Service['nemesis'],
   }
 
@@ -165,11 +156,13 @@ class www::nemesis ( $git_root, $root_dir ) {
 
   # Not actually sure I like that gunicorn runs as a global service, but this is
   # the simplest to get going with for now (rather than defining our own service).
+  $runtime_dir_name = 'nemesis'
   sr_site::systemd_service { 'nemesis':
     desc    => 'User management web interface',
     dir     => $root_dir,
     user    => 'wwwcontent',
     command => "/usr/bin/gunicorn-3 --config=${gunicorn_config} nemesis.wsgi:application",
+    runtime_dir => $runtime_dir_name,
     require   => [
       Vcsrepo[$root_dir],
       File[$gunicorn_config],

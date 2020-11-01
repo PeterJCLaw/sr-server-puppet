@@ -77,22 +77,13 @@ class www::code_submitter  (
     ],
   }
 
-  # TODO: need to ensure this is present after a reboot!
-  # TODO: ensure nginx can read this!
-  $socket_dir = '/var/run/code-submitter'
-  file { $socket_dir:
-    ensure  => directory,
-    owner   => 'wwwcontent',
-    group   => 'apache',
-    mode    => '0644',
-  }
-
+  $runtime_dir_name = 'code-submitter'
   sr_site::systemd_service { 'code-submitter':
     desc    => 'Code Submission Service',
     dir     => $root_dir,
     user    => 'wwwcontent',
-    command => "${venv_dir}/bin/uvicorn code_submitter.server:app --uds ${socket_dir}/code-submitter.socket --forwarded-allow-ips='*' --root-path /code-submitter",
-    require => File[$socket_dir],
+    command => "${venv_dir}/bin/uvicorn code_submitter.server:app --uds /var/run/${runtime_dir_name}/code-submitter.socket --forwarded-allow-ips='*' --root-path /code-submitter",
+    runtime_dir => $runtime_dir_name,
     subscribe => [
       Vcsrepo[$root_dir],
       Python::Virtualenv[$venv_dir],
