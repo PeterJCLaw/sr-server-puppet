@@ -46,6 +46,8 @@
          modified as follows:
        - `cookie_domain`, `server_name`: change `sr-vm` for `studentrobotics.org`
        - `ldap_password`: change to the actual LDAP password for the anon user
+         (see the following step, related to the production configuration for
+         choosing that password)
 
      - `mcfs/ticket.key`; see <https://github.com/srobo/tickets#ticket-generation>
        for how to generate this. (Note: this _may_ need to be the same file as
