@@ -42,9 +42,8 @@
    <https://github.com/srobo/server-dummy-secrets>.
 
    The files you'll need to create in `/srv/secrets` are:
-     - `mysql/phpbb_sr$YYYY.db`, with `$YYYY` so that the file name matches
-       `$forum_db_name` in `modules/www/manifests/phpbb.pp`. This should be
-       copied from `dummy-secrets` and modified as follows:
+     - `mysql/phpbb_sr.db` which should be copied from `dummy-secrets` and
+         modified as follows:
        - `cookie_domain`, `server_name`: change `sr-vm` for `studentrobotics.org`
        - `ldap_password`: change to the actual LDAP password for the anon user
 
