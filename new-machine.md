@@ -22,7 +22,10 @@
 
 6. Configure key based SSH access for that user.
 
-7. Bootstrap puppet:
+7. Repeat for another user, so that more than one person has access to
+   administer the machine.
+
+8. Bootstrap puppet:
 
     ```bash
     dnf install --assumeyes puppet git
@@ -30,7 +33,7 @@
     git clone --recurse-submodules https://github.com/srobo/server-puppet /etc/puppet
     ```
 
-8. Create the "secrets" for the machine. These are a mixture of "backup" data
+9. Create the "secrets" for the machine. These are a mixture of "backup" data
    and new private data. If restoring from a backup, this step would be skipped
    and the backup would be dropped in instead. This is placed in `/srv/secrets`,
    which must be readable only by `root`: `mkdir --mode=0700 /srv/secrets`.
@@ -87,24 +90,24 @@
      - `login/backups_ssh_keys`; this can be empty as a first pass.
      - `login/monitoring_ssh_keys`; this can be empty as a first pass.
 
-9. Create the production configuration for the new machine. This is a manual
-   process of generating random secrets for the machine and building them into a
-   hiera config at `/srv/secrets/$(hostname).yaml`.
+10. Create the production configuration for the new machine. This is a manual
+    process of generating random secrets for the machine and building them into a
+    hiera config at `/srv/secrets/$(hostname).yaml`.
 
-   That file should then be symlinked into puppet's `hieradata` directory:
+    That file should then be symlinked into puppet's `hieradata` directory:
 
-    ```bash
-    mkdir --mode=0700 /etc/puppet/hieradata/secrets
-    ln -s /srv/secrets/$(hostname).yaml /etc/puppet/hieradata/secrets/
-    ```
+     ```bash
+     mkdir --mode=0700 /etc/puppet/hieradata/secrets
+     ln -s /srv/secrets/$(hostname).yaml /etc/puppet/hieradata/secrets/
+     ```
 
-   See `hieradata/common.yaml` for the settings to override and how to generate
-   them.
+    See `hieradata/common.yaml` for the settings to override and how to generate
+    them.
 
-   **Warning**: if you fail to create this file puppet will still apply, however
-   you will have provisioned a server with insecure details.
+    **Warning**: if you fail to create this file puppet will still apply, however
+    you will have provisioned a server with insecure details.
 
-10. Run puppet:
+11. Run puppet:
 
     ```bash
     /etc/puppet/scripts/apply
@@ -117,7 +120,7 @@
     Error: /Stage[main]/Sr_site::Firewall/Resources[firewall]: Failed to generate additional resources using 'generate': Command iptables_save is missing
     ```
 
-11. Configure the forums' Slack integration. This is manual as it involves
+12. Configure the forums' Slack integration. This is manual as it involves
     getting a secret from Slack and inputting it into the forums configuration
     pages.
 
