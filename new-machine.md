@@ -70,7 +70,7 @@
        touch ide/notifications/sr ide/repos/sr ide/settings/sr
        ```
 
-     - `ldap/ldap_backup`; this should be empty on a new machine.
+     - `ldap/ldap_backup`; this should be an empty file on a new machine.
 
        ```bash
        mkdir --mode=700 /srv/secrets/ldap
@@ -86,8 +86,8 @@
        cp /etc/ssh/ssh_host* /srv/secrets/login
        ```
 
-     - `login/backups_ssh_keys`; this can be empty as a first pass.
-     - `login/monitoring_ssh_keys`; this can be empty as a first pass.
+     - `login/backups_ssh_keys`; this can be an empty file as a first pass.
+     - `login/monitoring_ssh_keys`; this can be an empty file as a first pass.
 
 10. Create the production configuration for the new machine. This is a manual
     process of generating random secrets for the machine and building them into a
