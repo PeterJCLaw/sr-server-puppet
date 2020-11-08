@@ -128,7 +128,8 @@
     getting a secret from Slack and inputting it into the forums configuration
     pages.
 
-    1. Login to the forums' Admin Control Panel and go to the Customise tab.
+    1. Login to the forums as the `anon` user (which is configured as the forms
+       Admin) and go to the Admin Control Panel then to the Customise tab.
     2. Disable and then re-enable the "Entropy" extension (this forces it to
        re-register with PHPBB and thus add itself to the Admin Control Panel UI)
     3. Sign in to the SR slack and then visit https://api.slack.com/apps
