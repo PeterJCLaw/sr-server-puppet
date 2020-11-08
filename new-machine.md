@@ -103,7 +103,10 @@
      ```
 
     See `hieradata/common.yaml` for the settings to override and how to generate
-    them.
+    them. Note that that file contains all the base settings yet the secret
+    machine config should contain only the keys which are actually secret.
+    Configuration which is not secret should be in
+    `hieradata/nodes/$(hostname).yaml`, committed to this repo.
 
     **Warning**: if you fail to create this file puppet will still apply, however
     you will have provisioned a server with insecure details.
