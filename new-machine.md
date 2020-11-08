@@ -137,4 +137,4 @@
        "Add features and functionality" and then "Incoming Webhooks".
     5. Copy the Webhook URL for the app.
     7. Go to the Extension page in the Admin Control Panel of the forums
-    6. Paste the Webhook URL into the "Incoming webkook url" field & Submit
+    6. Paste the Webhook URL into the "Incoming webhook url" field & Submit
