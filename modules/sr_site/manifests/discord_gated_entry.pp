@@ -55,12 +55,12 @@ class sr_site::discord_gated_entry (
 
   $runtime_dir_name = 'discord-gated-entry'
   sr_site::systemd_service { 'discord-gated-entry':
-    desc    => 'Discord bot for gated entry',
-    dir     => $root_dir,
-    user    => 'discord',
-    command => "${venv_dir}/bin/python main.py",
+    desc        => 'Discord bot for gated entry',
+    dir         => $root_dir,
+    user        => 'discord',
+    command     => "${venv_dir}/bin/python main.py",
     runtime_dir => $runtime_dir_name,
-    subscribe => [
+    subscribe   => [
       Vcsrepo[$root_dir],
       Python::Virtualenv[$venv_dir],
       Python::Requirements[$venv_dir],
