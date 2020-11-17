@@ -90,6 +90,11 @@ class sr_site( $git_root ) {
     class { 'sr_site::mysql':
       require => File['/usr/local/var/sr'],
     }
+
+    class { 'sr_site::discord_gated_entry':
+      git_root => $git_root,
+      root_dir => '/srv/discord-gated-entry',
+    }
   }
 
   if $competitor_services {

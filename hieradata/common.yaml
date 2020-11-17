@@ -146,3 +146,6 @@ nemesis_mail_smtp: ponies
 nemesis_mail_user: ponies
 nemesis_mail_pw: ponies
 nemesis_mail_from: ponies
+
+# Discord gated entry bot. Plaintext. Get from discord admin.
+discord_gated_entry_token: discord
