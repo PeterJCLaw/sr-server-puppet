@@ -11,7 +11,8 @@ class www::python_docs ( $web_root_dir, $version ) {
   $target_dir = "${$target_root}${archive_name}"
 
   # wget is generally nicer than curl for downloading things.
-  package { ['wget']:
+  # bzip2 is needed to unzip some things
+  package { ['wget', 'bzip2']: 
     ensure => present,
   }
 
@@ -28,7 +29,7 @@ class www::python_docs ( $web_root_dir, $version ) {
           wget -O - https://www.python.org/ftp/python/doc/${version}/${archive_name}.tar.bz2 | tar -xj -C ${target_root} ",
     provider => 'shell',
     creates => $target_dir,
-    require => [Package['wget'],File[$target_root]],
+    require => [Package['wget', 'bzip2'],File[$target_root]],
   }
 
   file { "${web_root_dir}/docs":
