@@ -13,7 +13,7 @@ class sr_site::discord_gated_entry (
     ensure    => present,
     provider  => git,
     source    => 'https://github.com/srobo/discord-gated-entry',
-    revision  => 'c2eeaf6587c9802819fcab614031bdd6fa2d7a05',
+    revision  => '206397e4b293d91b7388be3e2597af5aa1b8ba0c',
     owner     => 'discord',
     group     => 'users',
     require   => User['discord'],
