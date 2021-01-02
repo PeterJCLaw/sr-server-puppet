@@ -12,7 +12,6 @@ class www::code_submitter  (
     group     => 'apache',
   }
 
-  $verify_tls = !$devmode
   $env_file = "${root_dir}/.env"
   file { $env_file:
     ensure  => present,
