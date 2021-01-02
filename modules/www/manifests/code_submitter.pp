@@ -22,6 +22,14 @@ class www::code_submitter  (
     require => Vcsrepo[$root_dir],
   }
 
+  file { '/etc/sr/code-submitter-credentials.yaml':
+    ensure => present,
+    owner => 'wwwcontent',
+    group => 'apache',
+    mode => '440',
+    source => "/srv/secrets/code-submitter-credentials.yaml",
+  }
+
   package { 'make':
     ensure  => present,
   }
