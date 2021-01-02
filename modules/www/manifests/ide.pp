@@ -306,6 +306,6 @@ class www::ide (
     owner => 'wwwcontent',
     group => 'apache',
     mode => '440',
-    source => "/srv/secrets/wifi-keys.yaml",
+    source => '/srv/secrets/wifi-keys.yaml',
   }
 }
