@@ -31,6 +31,13 @@ class www( $git_root ) {
     require => Package['httpd'],
   }
 
+  file { '/etc/sr':
+    ensure => directory,
+    owner => 'root',
+    group => 'root',
+    mode => '755',
+  }
+
   # Home dir needed so it can run cron jobs.
   file { '/home/wwwcontent':
     ensure  => directory,
