@@ -31,13 +31,6 @@ class www( $git_root ) {
     require => Package['httpd'],
   }
 
-  file { '/etc/sr':
-    ensure => directory,
-    owner => 'root',
-    group => 'root',
-    mode => '755',
-  }
-
   # Home dir needed so it can run cron jobs.
   file { '/home/wwwcontent':
     ensure  => directory,
@@ -64,6 +57,13 @@ class www( $git_root ) {
   }
 
   if $competitor_services {
+    file { '/etc/sr':
+      ensure => directory,
+      owner => 'root',
+      group => 'root',
+      mode => '755',
+    }
+
     # Python 2.7.5 docs -- version match the python on the BBs
     class { 'www::python_docs':
       web_root_dir => $web_root_dir,
