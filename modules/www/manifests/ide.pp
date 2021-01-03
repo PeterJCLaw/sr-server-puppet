@@ -298,6 +298,6 @@ class www::ide (
     group => 'apache',
     mode => '440',
     source => "/srv/secrets/wifi-keys.yaml",
-    require => File["/etc/sr"]
+    require => File['/etc/sr']
   }
 }
