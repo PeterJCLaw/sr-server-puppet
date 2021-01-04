@@ -56,14 +56,14 @@ class www( $git_root ) {
     content => "<h2>${::hostname}</h2>",
   }
 
-  if $competitor_services {
-    file { '/etc/sr':
-      ensure => directory,
-      owner => 'root',
-      group => 'root',
-      mode => '755',
-    }
+  file { '/etc/sr':
+    ensure => directory,
+    owner => 'root',
+    group => 'root',
+    mode => '755',
+  }
 
+  if $competitor_services {
     # Python 2.7.5 docs -- version match the python on the BBs
     class { 'www::python_docs':
       web_root_dir => $web_root_dir,
