@@ -297,7 +297,7 @@ class www::ide (
     owner => 'wwwcontent',
     group => 'apache',
     mode => '440',
-    source => "/srv/secrets/wifi-keys.yaml",
-    require => File['/etc/sr']
+    source => '/srv/secrets/wifi-keys.yaml',
+    require => File['/etc/sr'],
   }
 }
