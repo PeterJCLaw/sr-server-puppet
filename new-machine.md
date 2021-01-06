@@ -62,6 +62,9 @@
        ```bash
        /etc/puppet/scripts/generate-wifi-keys.py > /srv/secrets/wifi-keys.yaml
        ```
+     - `code-submitter-credentials.yaml`; this should be a YAML file in the same format
+       as `wifi-keys.yaml` (and thus generated using the same script). In addition to
+       competing teams, the TLA "SRX" should be provided for volunteer login.
 
      - `ide/notifications`, `ide/repos` and `ide/settings`; these should be
        non-empty directories:

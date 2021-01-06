@@ -12,7 +12,6 @@ class www::code_submitter  (
     group     => 'apache',
   }
 
-  $verify_tls = !$devmode
   $env_file = "${root_dir}/.env"
   file { $env_file:
     ensure  => present,
@@ -21,6 +20,15 @@ class www::code_submitter  (
     mode    => '0640',
     content => template('www/code-submitter.env.erb'),
     require => Vcsrepo[$root_dir],
+  }
+
+  file { '/etc/sr/code-submitter-credentials.yaml':
+    ensure => present,
+    owner => 'wwwcontent',
+    group => 'apache',
+    mode => '440',
+    source => '/srv/secrets/code-submitter-credentials.yaml',
+    require => File['/etc/sr'],
   }
 
   package { 'make':
