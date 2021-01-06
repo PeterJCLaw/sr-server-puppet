@@ -27,7 +27,7 @@ class www::code_submitter  (
     owner => 'wwwcontent',
     group => 'apache',
     mode => '440',
-    source => "/srv/secrets/code-submitter-credentials.yaml",
+    source => '/srv/secrets/code-submitter-credentials.yaml',
     require => File['/etc/sr'],
   }
 
