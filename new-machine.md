@@ -3,6 +3,11 @@
 1. Spin up the VM. It needs to be a supported OS & version; see the
    `Vagrantfile` for the current target.
 
+  **Note**: for TLS configuration to work correctly the hostname of the machine
+  must match the public DNS name of the machine. If spinning up a Digtial Ocean
+  box, this means the name of the machine you put into DO's UI must be the fully
+  qualified name for the machine.
+
 2. Login as root
 
 3. Create a non-root user with `sudo` access:
