@@ -25,6 +25,9 @@
 5. Logout and log back in as that user. This is important because our puppet
    configuration removes `ssh` access for the root user.
 
+   **Note**: the remainder of thes instructions require root access, so you
+   probably want to `sudo su` at this point.
+
 6. Configure key based SSH access for that user.
 
 7. Repeat for another user, so that more than one person has access to
