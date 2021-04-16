@@ -22,7 +22,8 @@ class www::code_submitter  (
     require => Vcsrepo[$root_dir],
   }
 
-  file { '/etc/sr/code-submitter-credentials.yaml':
+  $credentials_file = '/etc/sr/code-submitter-credentials.yaml'
+  file { $credentials_file:
     ensure => present,
     owner => 'wwwcontent',
     group => 'apache',
@@ -96,6 +97,7 @@ class www::code_submitter  (
       Vcsrepo[$root_dir],
       Python::Virtualenv[$venv_dir],
       Python::Requirements[$venv_dir],
+      File[$credentials_file],
       File[$env_file],
     ],
   }
